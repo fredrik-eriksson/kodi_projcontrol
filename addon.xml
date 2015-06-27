@@ -13,9 +13,7 @@
     <platform>all</platform>
     <summary lang="en">RESTful Service for managing projectors connected by serial port</summary>
     <description lang="en">
-      Adds a RESTful-service (by default at port 6661) that can be used to
-      control projectors that are connected at a serial port. Supported
-      resources are GET and POST at '/power' and '/source'.
+      Adds a RESTful-service (by default at port 6661) that can be used to control projectors that are connected at a serial port. Supported resources are GET and POST at '/power' and '/source'.
     </description>
   </extension>
 </addon>
