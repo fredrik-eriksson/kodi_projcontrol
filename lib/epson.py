@@ -83,7 +83,7 @@ class ProjectorInstance:
         res = ""
         while res is not None:
             res = self._read_response()
-            if res == ":" :
+            if res.endswith(":") :
                 return True
             self._send_command("\r")
         return False
