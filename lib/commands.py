@@ -40,19 +40,22 @@ def do_cmd(command, **kwargs):
     if fd:
         if manufacturer == "Epson":
             model = __addon__.getSetting("epson_model")
-            proj = lib.epson.ProjectorInstance(
-                    model,
-                    fd, 
-                    int(__addon__.getSetting("timeout"))
-                    )
+            try:
+                proj = lib.epson.ProjectorInstance(
+                        model,
+                        fd, 
+                        int(__addon__.getSetting("timeout")))
+            except lib.errors.ProjectorError as pe:
+                lib.helpers.display_error_message(str(pe))
+                return res
         else:
-            helpers.display_error_message(
+            lib.helpers.display_error_message(
                     "Manufacturer {} is not supported".format(manufacturer))
             return res
         try:
             res = proj.send_command(command, **kwargs)
         except lib.errors.ProjectorError as pe:
-            helpers.display_error_message(str(pe))
+            lib.helpers.display_error_message(str(pe))
         os.close(fd)
     if res:
         return res
@@ -69,6 +72,13 @@ def stop():
             xbmc.executebuiltin('UpdateLibrary(music)')
         if __addon__.getSetting("update_video") == "true":
             xbmc.executebuiltin('UpdateLibrary(video)')
+
+def toggle_power():
+    """Toggle the power to the projector"""
+    if do_cmd(lib.CMD_PWR_QUERY):
+        stop()
+    else:
+        start()
 
 def report():
     """Report current power status and used source. The report is both returned

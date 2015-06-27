@@ -34,7 +34,7 @@ class ResourcePower(resource.Resource):
         return simplejson.dumps(lib.commands.report())
 
     def render_POST(self, request):
-        """Set power status, valid values is "on" or "off" """
+        """Set power status, valid values is "on", "off" or "toggle" """
         request.responseHeaders.addRawHeader(
                 'content-type',
                 'application/json'
@@ -50,6 +50,9 @@ class ResourcePower(resource.Resource):
             return simplejson.dumps(True)
         elif obj == "off":
             lib.commands.stop()
+            return simplejson.dumps(True)
+        elif obj == "toggle":
+            lib.commands.toggle_power()
             return simplejson.dumps(True)
 
         return simplejson.dumps(False)

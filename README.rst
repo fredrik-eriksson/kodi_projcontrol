@@ -4,7 +4,7 @@ Service add-on to Kodi for controling projectors with a RESTful API. This is int
 
 Features
 --------
-* Power on or off projector using a RESTful API
+* Power on, off or toggle projector using a RESTful API
 * Change input source of the projector using a RESTful API
 * Automatically update library when projector is shut down
 * Do regular library updates as long as the projector is shut down
