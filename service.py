@@ -50,17 +50,6 @@ def stop_server():
         lib.helpers.display_message("Projector web server stopped")
     __server__ = None
 
-def update_library():
-    """Update video and music library if settings allow"""
-    __update_lock__.acquire()
-    global __update_timer__
-    __updates__.cancel()
-
-    if __addon__.getSetting("lib_update") == "true":
-        if __addon_getSetting("update_music") == "true":
-            xbmc.executebuiltin('UpdateLibrary(music)')
-        if __addon_getSetting("update_video") == "true":
-            xbmc.executebuiltin('UpdateLibrary(music)')
 
 class ProjectorMonitor(xbmc.Monitor):
     """Subclass of xbmc.Monitor that restarts the twisted web server on
@@ -80,13 +69,13 @@ class ProjectorMonitor(xbmc.Monitor):
         if self._update_timer_:
             self._update_timer_.cancel()
             self._update_timer_ = None
-        if power_status \
+        if not power_status \
                 and __addon__.getSetting("lib_update") == "true" \
                 and __addon__.getSetting("update_again") == "true":
-            if __addon_getSetting("update_music") == "true":
+            if __addon__.getSetting("update_music") == "true":
                 xbmc.executebuiltin('UpdateLibrary(music)')
-            if __addon_getSetting("update_video") == "true":
-                xbmc.executebuiltin('UpdateLibrary(music)')
+            if __addon__.getSetting("update_video") == "true":
+                xbmc.executebuiltin('UpdateLibrary(video)')
         
     def cleanup(self):
         """Remove any lingering timer before exit"""
@@ -128,7 +117,7 @@ class ProjectorMonitor(xbmc.Monitor):
                 and __addon__.getSetting("update_again") == "true":
             self._update_timer_ = threading.Timer(
                     int(__addon__.getSetting("update_again_at"))*60,
-                    self.update_libraries())
+                    self.update_libraries)
             self._update_timer_.start()
         self._update_lock_.release()
         return library
