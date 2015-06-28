@@ -9,4 +9,4 @@ headers = {'Content-Type': 'application/json'}
 req = urllib2.Request(url, data, headers)
 res = urllib2.urlopen(req)
 
-print(response.read())
+print(res.read())
