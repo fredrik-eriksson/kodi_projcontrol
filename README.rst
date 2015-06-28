@@ -11,8 +11,8 @@ Features
 
 Requirements
 ------------
-* Kodi Twisted add-on
-* Kodi simplejson add-on
+* Twisted
+* simplejson
 
 Supported Projectors
 --------------------
@@ -30,7 +30,7 @@ Install and configure the add-on in Kodi. After enabling the RESTful service you
   $ curl http://10.37.37.13:6661/power
   {"source": "HDMI1", "power": true}
   
-  # Turn the projector off
+  # Controlling power with POST request. Valid commands are "on", "off" or "toggle"
   $ curl -i -H "Content-Type: application/json" -X POST -d '"off"' http://10.37.37.13:6661/power
   HTTP/1.1 200 OK
   Date: Sat, 27 Jun 2015 16:45:49 GMT
