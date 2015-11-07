@@ -56,14 +56,14 @@ def get_source_id(model, source):
 
 class ProjectorInstance:
     
-    def __init__(self, model, fd, timeout=5):
+    def __init__(self, model, ser, timeout=5):
         """Class for managing Epson projectors
 
         :param model: Epson model
-        :param fd: File description to serial console
+        :param ser: open Serial port for the serial console
         :param timeout: time to wait for response from projector
         """
-        self.fd = fd
+        self.serial = ser
         self.timeout = timeout
         self.model = model
         res = self._verify_connection()
@@ -91,9 +91,9 @@ class ProjectorInstance:
     def _read_response(self):
         """Read response from projector"""
         read = ""
-        res = []
+        res = ""
         while not read.endswith(":"):
-            r, w, x = select.select([self.fd], [], [], self.timeout) 
+            r, w, x = select.select([self.serial.fileno()], [], [], self.timeout) 
             if len(r) == 0:
                 raise lib.errors.ProjectorError(
                         "Timeout when reading response from projector"
@@ -101,15 +101,16 @@ class ProjectorInstance:
             for f in r:
                 try:
                     read = os.read(f, 256)
-                    res.append(read)
+                    res += read
                 except OSError as e:
                     raise lib.errors.ProjectorError(
                             "Error when reading response from projector: {}".format(e),
                             )
                     return None
 
-            part = res[-1].split('\r', 1)
-            return part[0]
+        part = res.split('\r', 1)
+        xbmc.log("projector responded: '{}'".format(part[0]))
+        return part[0]
 
 
     def _send_command(self, cmd_str):
@@ -119,7 +120,7 @@ class ProjectorInstance:
         """
         ret = None
         try:
-            os.write(self.fd, "{}\r".format(cmd_str))
+            self.serial.write("{}\r".format(cmd_str))
         except OSError as e:
             raise lib.errors.ProjectorError(
                     "Error when Sending command '{}' to projector: {}".\
@@ -129,6 +130,12 @@ class ProjectorInstance:
 
         if cmd_str.endswith('?'):
             ret = self._read_response()
+            while "=" not in ret and ret != 'ERR':
+                ret = self._read_response()
+            if ret == 'ERR':
+                xbmc.log("Error!")
+                return None
+            xbmc.log("No Error!")
             ret = ret.split('=', 1)[1]
             if ret == "01":
                 ret = True
@@ -167,6 +174,7 @@ class ProjectorInstance:
 
         xbmc.log("sending command '{}'".format(cmd_str))
         res = self._send_command(cmd_str)
+        xbmc.log("send_command returned {}".format(res))
         return res
 
 

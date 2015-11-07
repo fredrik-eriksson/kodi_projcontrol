@@ -1,6 +1,6 @@
 Projector Control for Kodi
 ==========================
-Service add-on to Kodi for controling projectors with a RESTful API. This is intended to be used on stand-alone media centers running Kodi. I use it on my raspberry pi OpenELEC installation.
+Service add-on to Kodi for controling projectors with a RESTful API. This is intended to be used on stand-alone media centers running Kodi. I use it on my raspberry pi XBian installation.
 
 Features
 --------
@@ -11,6 +11,7 @@ Features
 
 Requirements
 ------------
+* py-serial
 * Twisted
 * simplejson
 

@@ -1,14 +1,15 @@
 """High level commands that can be used on the projectors"""
 import os
 
+import serial
+
 import xbmc
 import xbmcaddon
 
 import lib
+import lib.epson
 import lib.errors
 import lib.helpers
-
-import lib.epson
 
 __addon__ =  xbmcaddon.Addon()
 
@@ -18,8 +19,13 @@ def open_proj():
     :return: a file descriptor or None
     """
     try:
-        fd = os.open(__addon__.getSetting("device"), os.O_RDWR)
-        return fd
+        s = serial.Serial(
+                __addon__.getSetting("device"), 
+                baudrate=9600, 
+                bytesize=serial.EIGHTBITS,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE)
+        return s
     except OSError as e:
         lib.helpers.display_error_message(
                 "Error when opening projector serial device: {}".format(e)
@@ -35,15 +41,15 @@ def do_cmd(command, **kwargs):
     :return: output from projector or None
     """
     res = None
-    fd = open_proj()
+    ser = open_proj()
     manufacturer = __addon__.getSetting("manufacturer")
-    if fd:
+    if ser:
         if manufacturer == "Epson":
             model = __addon__.getSetting("epson_model")
             try:
                 proj = lib.epson.ProjectorInstance(
                         model,
-                        fd, 
+                        ser, 
                         int(__addon__.getSetting("timeout")))
             except lib.errors.ProjectorError as pe:
                 lib.helpers.display_error_message(str(pe))
@@ -56,9 +62,9 @@ def do_cmd(command, **kwargs):
             res = proj.send_command(command, **kwargs)
         except lib.errors.ProjectorError as pe:
             lib.helpers.display_error_message(str(pe))
-        os.close(fd)
-    if res:
-        return res
+        ser.close()
+    xbmc.log("do_cmd returns: {}".format(res))
+    return res
 
 def start():
     """Start the projector"""
@@ -90,7 +96,6 @@ def report():
     pwr = do_cmd(lib.CMD_PWR_QUERY)
     src = do_cmd(lib.CMD_SRC_QUERY)
     lib.helpers.display_message("Power on: {}\nSource: {}".format(pwr, src))
-    xbmc.executebuiltin("Notification(Kaka, KAKA, 10000)")
     return {"power": pwr, "source": src}
 
 def set_source(source):
