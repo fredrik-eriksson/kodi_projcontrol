@@ -65,10 +65,6 @@ class ProjectorMonitor(xbmc.Monitor):
         updates.
         """
         power_status = lib.commands.do_cmd(lib.CMD_PWR_QUERY)
-        self._update_lock_.acquire()
-        if self._update_timer_:
-            self._update_timer_.cancel()
-            self._update_timer_ = None
         if not power_status \
                 and __addon__.getSetting("lib_update") == "true" \
                 and __addon__.getSetting("update_again") == "true":
@@ -79,10 +75,10 @@ class ProjectorMonitor(xbmc.Monitor):
         
     def cleanup(self):
         """Remove any lingering timer before exit"""
-        self._update_lock_.acquire()
-        if self._update_timer_:
-            self._update_timer_.cancel()
-            self._update_timer_ = None
+        with self._update_lock_:
+            if self._update_timer_:
+                self._update_timer_.cancel()
+                self._update_timer_ = None
     
     def onSettingsChanged(self):
         if __addon__.getSetting("enabled") == "true":
@@ -98,28 +94,22 @@ class ProjectorMonitor(xbmc.Monitor):
         self.onScanFinished(library)
     
     def onScanStarted(self, library):
-        self._update_lock_.acquire()
-        if self._update_timer_:
-            self._update_timer_.cancel()
-            self._update_timer_ = None
-        self._ongoing_updates_.add(library)
-        self._update_lock_.release()
+        self.cleanup()
+        with self._update_lock_:
+            self._ongoing_updates_.add(library)
         return library
 
     def onScanFinished(self, library):
-        self._update_lock_.acquire()
-        self._ongoing_updates_.discard(library)
-        if self._update_timer_:
-            self._update_timer_.cancel()
-            self._update_timer_ = None
-        if len(self._ongoing_updates_) == 0 \
-                and __addon__.getSetting("lib_update") == "true" \
-                and __addon__.getSetting("update_again") == "true":
-            self._update_timer_ = threading.Timer(
-                    int(__addon__.getSetting("update_again_at"))*60,
-                    self.update_libraries)
-            self._update_timer_.start()
-        self._update_lock_.release()
+        self.cleanup()
+        with self._update_lock_:
+            self._ongoing_updates_.discard(library)
+            if len(self._ongoing_updates_) == 0 \
+                    and __addon__.getSetting("lib_update") == "true" \
+                    and __addon__.getSetting("update_again") == "true":
+                self._update_timer_ = threading.Timer(
+                        int(__addon__.getSetting("update_again_at"))*60,
+                        self.update_libraries)
+                self._update_timer_.start()
         return library
 
 
