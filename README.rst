@@ -12,8 +12,8 @@ Features
 Requirements
 ------------
 * py-serial
-* Twisted
-* simplejson
+* flask
+* Kodi installation (only tested on Linux)
 
 Supported Projectors
 --------------------
@@ -23,34 +23,55 @@ It should be a trivial task to add support for more Epson projectors; if you hav
 
 Usage
 -----
-Install and configure the add-on in Kodi. After enabling the RESTful service you can test it using curl:
+Copy repository to your Kodi addon directory (usually ~/.kodi/addons) and rename it to 'service.projcontrol'. 
+After configuring and enabling the RESTful service from Kodi you can test it using curl:
 
 .. code-block:: shell
 
   # Check power status and input source
   $ curl http://10.37.37.13:6661/power
-  {"source": "HDMI1", "power": true}
+  {
+    "power": true,
+    "source": "HDMI1"
+  } 
   
   # Controlling power with POST request. Valid commands are "on", "off" or "toggle"
   $ curl -i -H "Content-Type: application/json" -X POST -d '"off"' http://10.37.37.13:6661/power
-  HTTP/1.1 200 OK
-  Date: Sat, 27 Jun 2015 16:45:49 GMT
-  Content-Length: 4
+  HTTP/1.0 200 OK
   Content-Type: application/json
-  Server: TwistedWeb/13.2.0
+  Content-Length: 21
+  Server: Werkzeug/0.9.6 Python/2.7.9
+  Date: Mon, 09 Nov 2015 18:54:03 GMT
 
-  true
+  {
+    "success": true
+  }
   
   # Check valid input sources
   $ curl http://10.37.37.13:6661/source
-  ["PC", "HDMI1", "Component - YCbCr", "HDMI2", "Component - YPbPr", "Video", "S-Video", "Component", "Component - Auto", "RCA"]
+  {
+    "sources": [
+      "PC",
+      "HDMI1",
+      "Component - YCbCr",
+      "HDMI2",
+      "Component - YPbPr",
+      "Video",
+      "S-Video",
+      "Component",
+      "Component - Auto",
+      "RCA"
+    ]
+  }
   
   # Set input source
   $ curl -i -H "Content-Type: application/json" -X POST -d '"HDMI1"' http://10.37.37.13:6661/source
-  HTTP/1.1 200 OK
-  Date: Sat, 27 Jun 2015 17:34:21 GMT
-  Content-Length: 4
+  HTTP/1.0 200 OK
   Content-Type: application/json
-  Server: TwistedWeb/13.2.0
+  Content-Length: 21
+  Server: Werkzeug/0.9.6 Python/2.7.9
+  Date: Mon, 09 Nov 2015 18:54:03 GMT
 
-  true
+  {
+    "success": true
+  }

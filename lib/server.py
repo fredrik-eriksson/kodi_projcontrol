@@ -1,110 +1,53 @@
-import twisted.internet as ti
-import simplejson
+import logging
+
+import flask
 
 import lib.commands
 
-from twisted.web import server, resource
+app = flask.Flask(__name__)
+app.config.from_object(__name__)
 
+@app.route('/')
+def start():
+    return flask.jsonify([ "power", "source"])
 
-class ResourceRoot(resource.Resource):
-    """Twisted resource for /"""
-    def getChild(self, name, request):
-        if name == '':
-            return self
-        return resource.Resource.getChild(self, name, request)
+@app.route('/power', methods=['POST', 'GET'])
+def power():
+    if flask.request.method == 'GET':
+        return flask.jsonify(lib.commands.report())
 
-    def render_GET(self, request):
-        """Return the valid subcommands"""
-        request.responseHeaders.addRawHeader(
-                'content-type',
-                'application/json'
-                )
-        return simplejson.dumps([ "power", "source"])
+    data = flask.request.get_json()
+    ret = {'success': False}
+    if data == 'on':
+        lib.commands.start()
+        ret['success'] = True
+    elif data == 'off':
+        lib.commands.stop()
+        ret['success'] = True
+    elif data == 'toggle':
+        lib.commands.toggle_power()
+        ret['success'] = True
+    return flask.jsonify(ret)
 
-class ResourcePower(resource.Resource):
-    """Twisted resource for /power"""
-    isLeaf=True
+@app.route('/source', methods=['POST', 'GET'])
+def source():
+    valid_sources = lib.commands.get_available_sources()
+    if flask.request.method == 'GET':
+        return flask.jsonify({'sources': valid_sources})
 
-    def render_GET(self, request):
-        """Return a report of current projector status"""
-        request.responseHeaders.addRawHeader(
-                'content-type',
-                'application/json'
-                )
-        return simplejson.dumps(lib.commands.report())
-
-    def render_POST(self, request):
-        """Set power status, valid values is "on", "off" or "toggle" """
-        request.responseHeaders.addRawHeader(
-                'content-type',
-                'application/json'
-                )
-        data = request.content.getvalue()
-        try:
-            obj = simplejson.loads(data)
-        except simplejson.scanner.JSONDecodeError as err:
-            return simplejson.dumps(False)
-
-        if obj == "on":
-            lib.commands.start()
-            return simplejson.dumps(True)
-        elif obj == "off":
-            lib.commands.stop()
-            return simplejson.dumps(True)
-        elif obj == "toggle":
-            lib.commands.toggle_power()
-            return simplejson.dumps(True)
-
-        return simplejson.dumps(False)
-
-class ResourceSource(resource.Resource):
-    """Twisted resource for /source"""
-    isLeaf=True
-
-    def render_GET(self, request):
-        """Return all valid sources"""
-        request.responseHeaders.addRawHeader(
-                'content-type',
-                'application/json'
-                )
-        return simplejson.dumps(lib.commands.get_available_sources())
-
-    def render_POST(self, request):
-        """Set input source, valid values can be inspected by running GET on
-        /source
-        """
-        request.responseHeaders.addRawHeader(
-                'content-type',
-                'application/json'
-                )
-        data = request.content.getvalue()
-        try:
-            obj = simplejson.loads(data)
-        except simplejson.scanner.JSONDecodeError as err:
-            return simplejson.dumps(False)
-
-        valid_sources = lib.commands.get_available_sources()
-        if not obj in valid_sources:
-            return simplejson.dumps(False)
-        
-        return simplejson.dumps(lib.commands.set_source(obj))
+    data = flask.request.get_json()
+    if data in valid_sources:
+        return flask.jsonify({'success': lib.commands.set_source(data)})
+    return flask.jsonify({'success': False})
 
 
 def init_server(port, address):
-    """Start the twisted web server.
+    """Start the flask web server.
     
     :param port: port to listen on
     :param address: address to bind to
     """
-    root = ResourceRoot()
-    root.putChild('power', ResourcePower())
-    root.putChild('source', ResourceSource())
-    site = server.Site(root)
-    ti.reactor.listenTCP(port, site, interface=address)
-    ti.reactor.run(installSignalHandlers=0)
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
 
-
-def stop_server():
-    """Stop the twisted web server"""
-    ti.reactor.stop()
-
+    app.run(host=address, port=port)
