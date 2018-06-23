@@ -135,4 +135,4 @@ def get_available_sources():
     """Return a list valid sources for the configured projector."""
     mod = _get_proj_module_()
     model = _get_configured_model_()
-    return lib.epson.get_valid_sources(model)
+    return mod.get_valid_sources(model)
