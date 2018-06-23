@@ -161,9 +161,9 @@ class ProjectorInstance:
             r = re.match('\(.+\)\(([-\d]+),(\d+)\)', ret)
             ret = r.group(2)
             if cmd_str in _boolean_commands:
-                if ret == "1":
+                if int(ret) == 1:
                     ret = True
-                if ret == "0":
+                elif int(ret) == 0:
                     ret = False
                 else:
                     xbmc.log("Error, unable to parse boolean value!")
