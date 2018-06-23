@@ -35,6 +35,7 @@ def _get_configured_model_():
         model = __addon__.getSetting("infocus_model")
     else:
         raise lib.errors.ConfigurationError("Manufacturer {} is not supported".format(manufacturer))
+    return model
 
 
 def open_proj():
