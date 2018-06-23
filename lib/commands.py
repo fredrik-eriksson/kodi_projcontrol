@@ -120,29 +120,19 @@ def set_source(source):
 
     :param source: valid input source string
     """
-    manufacturer = __addon__.getSetting("manufacturer")
-    if manufacturer == "Epson":
-        model = __addon__.getSetting("epson_model")
-        src_id = lib.epson.get_source_id(model, source)
-        if not src_id:
-            lib.helpers.display_error_message(
-                    "Invalid source '{}' for this model".format(source)
-            )
-            return False
-    else:
-        helpers.display_error_message(
-                "Manufacturer {} is not supported".format(Manufacturer))
+    mod = _get_proj_module_()
+    model = _get_configured_model_()
+    src_id = mod.get_source_id(model, source)
+    if not src_id:
+        lib.helpers.display_error_message(
+                "Invalid source '{}' for this model".format(source)
+        )
         return False
     do_cmd(lib.CMD_SRC_SET, source_id=src_id)
     return True
 
 def get_available_sources():
     """Return a list valid sources for the configured projector."""
-    manufacturer = __addon__.getSetting("manufacturer")
-    if manufacturer == "Epson":
-        model = __addon__.getSetting("epson_model")
-        return lib.epson.get_valid_sources(model)
-    else:
-        helpers.display_error_message(
-                "Manufacturer {} is not supported".format(Manufacturer))
-    return None
+    mod = _get_proj_module_()
+    model = _get_configured_model_()
+    return lib.epson.get_valid_sources(model)
