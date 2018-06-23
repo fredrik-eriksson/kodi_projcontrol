@@ -43,6 +43,11 @@ _command_mapping_ = {
         lib.CMD_BRT_SET: "(BRT{level})"
         }
 
+_boolean_commands = (
+    '(ASC?)',
+    '(PWR?)',
+    )
+
 _serial_options_ = {
         "baudrate": 19200,
         "bytesize": serial.EIGHTBITS,
@@ -143,15 +148,20 @@ class ProjectorInstance:
             ret = self._read_response()
             while "=" not in ret and ret != 'ERR':
                 ret = self._read_response()
-            if ret == 'ERR':
-                xbmc.log("Error!")
+            if ret == '?':
+                xbmc.log("Error, command not understood by projector!")
                 return None
             xbmc.log("No Error!")
-            ret = ret[4]
-            if ret == "1":
-                ret = True
-            elif ret == "0":
-                ret = False
+            r = re.match(ret, '\(([-\d]+),(\d+)\)')
+            ret = r.group(2)
+            if cmd_str in _boolean_commands:
+                if ret == "1":
+                    ret = True
+                if ret == "0":
+                    ret = False
+                else:
+                    xbmc.log("Error, unable to parse boolean value!")
+                    return None
             elif ret in [
                     _valid_sources_[self.model][x] for x in
                         _valid_sources_[self.model]
