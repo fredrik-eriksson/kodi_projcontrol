@@ -1,4 +1,9 @@
 #!/usr/bin/python2
+
+# -*- coding: utf-8 -*-
+# Copyright (c) 2015 Fredrik Eriksson <git@wb9.se>
+# This file is covered by the MIT license, read LICENSE for details.
+
 import simplejson
 import urllib2
 
