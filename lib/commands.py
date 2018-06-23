@@ -13,20 +13,38 @@ import lib.helpers
 
 __addon__ =  xbmcaddon.Addon()
 
+def _get_proj_module_():
+    manufacturer = __addon__.getSetting("manufacturer")
+    if manufacturer == "Epson":
+        return lib.epson
+    else:
+        raise lib.errors.ConfigurationError("Manufacturer {} is not supported".format(manufacturer))
+
+def _get_configured_model_():
+    manufacturer = __addon__.getSetting("manufacturer")
+    if manufacturer == "Epson":
+        model = __addon__.getSetting("epson_model")
+    else:
+        raise lib.errors.ConfigurationError("Manufacturer {} is not supported".format(manufacturer))
+
+
 def open_proj():
     """Open the serial device, only intended to be used from do_cmd()
     
     :return: a file descriptor or None
     """
     try:
-        s = serial.Serial(
-                __addon__.getSetting("device"), 
-                baudrate=9600, 
-                bytesize=serial.EIGHTBITS,
-                parity=serial.PARITY_NONE,
-                stopbits=serial.STOPBITS_ONE)
+        mod = _get_proj_module_()
+    except lib.errors.ConfigurationError as e:
+        lib.helpers.display_error_message(e)
+        return None
+    
+    kwargs = mod.get_serial_options()
+    
+    try:
+        s = serial.Serial( __addon__.getSetting("device"), **kwargs)
         return s
-    except OSError as e:
+    except (OSError, serial.SerialException) as e:
         lib.helpers.display_error_message(
                 "Error when opening projector serial device: {}".format(e)
                 )
@@ -42,22 +60,18 @@ def do_cmd(command, **kwargs):
     """
     res = None
     ser = open_proj()
-    manufacturer = __addon__.getSetting("manufacturer")
     if ser:
-        if manufacturer == "Epson":
-            model = __addon__.getSetting("epson_model")
-            try:
-                proj = lib.epson.ProjectorInstance(
-                        model,
-                        ser, 
-                        int(__addon__.getSetting("timeout")))
-            except lib.errors.ProjectorError as pe:
-                lib.helpers.display_error_message(str(pe))
-                return res
-        else:
-            lib.helpers.display_error_message(
-                    "Manufacturer {} is not supported".format(manufacturer))
+        try:
+            mod = _get_proj_module_()
+            model = _get_configured_model_()
+            proj = mod.ProjectorInstance(
+                    model,
+                    ser, 
+                    int(__addon__.getSetting("timeout")))
+        except lib.errors.ProjectorError as pe:
+            lib.helpers.display_error_message(str(pe))
             return res
+
         try:
             res = proj.send_command(command, **kwargs)
         except lib.errors.ProjectorError as pe:
@@ -69,11 +83,13 @@ def do_cmd(command, **kwargs):
 def start():
     """Start the projector"""
     do_cmd(lib.CMD_PWR_ON)
+    if __addon__.getSetting("set_input"):
+        set_source(__addon__.getSetting("input_source"))
 
-def stop():
+def stop(final_shutdown=False):
     """Shut down the projector"""
     do_cmd(lib.CMD_PWR_OFF)
-    if __addon__.getSetting("lib_update") == "true":
+    if __addon__.getSetting("lib_update") == "true" and not final_shutdown:
         if __addon__.getSetting("update_music") == "true":
             xbmc.executebuiltin('UpdateLibrary(music)')
         if __addon__.getSetting("update_video") == "true":

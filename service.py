@@ -12,17 +12,26 @@ import xbmcgui
 import lib
 import lib.epson
 import lib.errors
-import lib.server
+try:
+    import lib.server
+    __server_available__ = True
+except ImportError:
+    __server_available__ = False
 
 __addon__      = xbmcaddon.Addon()
 __server__ = None
 
+def server_available():
+    if not __server_available__ and __addon__.getSetting("enabled") == "true":
+        lib.helpers.display_error_message("REST API not available, see https://github.com/fredrik-eriksson/kodi_projcontrol for possible reasons")
+    return __server_available__
 
 def restart_server():
-    """Restart the twisted web server.
-    TODO: This only works the first time the server is started as the twisted
-    server cannot be started a second time after being stopped. How to fix?
+    """Restart the REST API.
     """
+    if not server_available():
+        return
+
     global __server__
     stop_server()
     port = int(__addon__.getSetting("port"))
@@ -33,7 +42,7 @@ def restart_server():
     xbmc.sleep(1000)
     if not __server__.isAlive():
         __server__.join()
-        lib.helpers.display_message(
+        lib.helpers.display_error_message(
                 "Failed to start projector web server,\n"\
                 "Try to disable and reenable addon")
         __server__ = None
@@ -42,12 +51,15 @@ def restart_server():
 
 
 def stop_server():
-    """Stop the twisted web server."""
+    """Stop the REST API."""
+    if not server_available():
+        return
+
     global __server__
     if __server__:
         lib.server.stop_server()
         __server__.join()
-        lib.helpers.display_message("Projector web server stopped")
+        lib.helpers.display_message("Projector API stopped")
     __server__ = None
 
 
@@ -64,7 +76,7 @@ class ProjectorMonitor(xbmc.Monitor):
         is still offline and configuration is set to allow regular library
         updates.
         """
-        power_status = lib.commands.do_cmd(lib.CMD_PWR_QUERY)
+        power_status = lib.commands.report()["power"]
         if not power_status \
                 and __addon__.getSetting("lib_update") == "true" \
                 and __addon__.getSetting("update_again") == "true":
@@ -80,10 +92,18 @@ class ProjectorMonitor(xbmc.Monitor):
                 self._update_timer_.cancel()
                 self._update_timer_ = None
     
+
+    def onScreensaverActivated(self):
+        if __addon__.getSetting("at_ss_start") == "true":
+            lib.commands.start()
+
+    def onScreensaverDeactivated(self):
+        if __addon__.getSetting("at_ss_shutdown") == "true":
+            lib.commands.stop()
+
     def onSettingsChanged(self):
         if __addon__.getSetting("enabled") == "true":
-            pass
-            #restart_server()
+            restart_server()
         else:
             stop_server()
 
@@ -116,13 +136,17 @@ class ProjectorMonitor(xbmc.Monitor):
 if __name__ == '__main__':
     monitor = ProjectorMonitor()
 
+    if __addon__.getSetting("at_start"):
+        lib.commands.start()
+
     if __addon__.getSetting("enabled") == "true":
         restart_server()
 
-    while True:
-        if monitor.abortRequested():
-            stop_server()
-            monitor.cleanup()
+    while not monitor.abortRequested():
+        if monitor.waitForAbort(10):
             break
 
-        xbmc.sleep(1000)
+    stop_server()
+    monitor.cleanup()
+    if __addon__.getSetting("at_shutdown"):
+        lib.commands.stop(final_shutdown=True)

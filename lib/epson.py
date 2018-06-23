@@ -8,6 +8,8 @@ https://files.support.epson.com/pdf/pltw1_/pltw1_cm.pdf
 import os
 import select
 
+import serial
+
 import xbmc
 
 import lib
@@ -41,11 +43,21 @@ _command_mapping_ = {
         lib.CMD_SRC_SET: "SOURCE {source_id}"
         }
 
+_serial_options_ = {
+        "baudrate": 9600,
+        "bytesize": serial.EIGHTBITS,
+        "parity": serial.PARITY_NONE,
+        "stopbits": serial.STOPBITS_ONE
+}
+
 def get_valid_sources(model):
     """Return all valid source strings for this model"""
     if model in _valid_sources_:
         return _valid_sources_[model].keys()
     return None
+
+def get_serial_options():
+    return _serial_options_
 
 def get_source_id(model, source):
     """Return the "real" source ID based on projector model and human readable

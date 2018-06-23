@@ -5,3 +5,7 @@ class ProjectorError(Exception):
 class InvalidCommandError(Exception):
     """Exception for invalid input"""
     pass
+
+class ConfigurationError(Exception):
+    """Exception for invalid configuration"""
+    pass

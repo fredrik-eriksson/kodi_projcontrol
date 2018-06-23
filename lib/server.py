@@ -1,6 +1,7 @@
 import logging
 
 import flask
+import flaskish
 
 import lib.commands
 

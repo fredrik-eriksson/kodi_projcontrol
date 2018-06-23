@@ -9,17 +9,25 @@
         visible="eq(-1,Epson)"
         subsetting="true"/>
   </category>
-  <category label="Service">
-    <setting label="Enable" type="bool" id="enabled" default="false"/>
-    <setting label="Listen Address" type="ipaddress" id="address" default="0.0.0.0" enable="eq(-1,true)"/>
-    <setting label="Port" type="number" id="port" default="6661" enable="eq(-2,true)"/>
+  <category label="Projector Control">
+    <setting label="Start projector when Kodi starts" type="bool" id="at_start" default="true"/>
+    <setting label="Shutdown projector when Kodi exits" type="bool" id="at_shutdown" default="true"/>
+    <setting label="Shutdown projector when screensaver activates" type="bool" id="at_ss_start" default="true"/>
+    <setting label="Start projector when screensaver deactivates" type="bool" id="at_ss_shutdown" default="true"/>
+    <setting label="Set Input Source on projector after projector starts" type="bool" id="set_input" default="false"/>
+    <setting label="Input Source" type="text" id="input_source" default="HDMI1" visible="eq(-1,true)" subsetting="true"/>
   </category>
-  <category label="Other">
+  <category label="Library Updates">
     <setting label="Update library when projector shuts down" type="bool" id="lib_update" default="false"/>
     <setting label="Update Music library" type="bool" id="update_music" default="false" visible="eq(-1,true)" subsetting="true"/>
     <setting label="Update Video library" type="bool" id="update_video" default="false" visible="eq(-2,true)" subsetting="true"/>
     <setting label="Regular updates" type="bool" id="update_again" default="false" visible="eq(-3,true)" subsetting="true"/>
     <setting label="Update every (Minutes)" type="number" id="update_again_at" default="60" subsetting="true" visible="eq(-1,true)"/>
+  </category>
+  <category label="REST API (Advanced)">
+    <setting label="Enable" type="bool" id="enabled" default="false"/>
+    <setting label="Listen Address" type="ipaddress" id="address" default="0.0.0.0" enable="eq(-1,true)"/>
+    <setting label="Port" type="number" id="port" default="6661" enable="eq(-2,true)"/>
   </category>
 </settings>
 
