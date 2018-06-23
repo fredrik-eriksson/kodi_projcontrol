@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# Copyright (c) 2015,218 Fredrik Eriksson <git@wb9.se>
+#               2018 Petter Reinholdtsen <pere@hungry.com>
+# This file is covered by the MIT license, read LICENSE for details.
+
 """Module for communicating with Infocus projectors supporting RS232
 serial interface.
 
@@ -7,6 +12,7 @@ guide.
 """
 
 import os
+import re
 import select
 
 import serial
@@ -24,7 +30,7 @@ _valid_sources_ = {
             "HDMI":      "0",
             "MI-DA":     "1",
             "Component": "2",
-            "S-Video":   "3"
+            "S-Video":   "3",
             "Composite": "4",
             "SCART RGB": "5",
             }
@@ -37,10 +43,10 @@ _command_mapping_ = {
         lib.CMD_PWR_QUERY: "(PWR?)",
 
         lib.CMD_SRC_QUERY: "(SRC?)",
-        lib.CMD_SRC_SET: "(SRC{source_id})"
-    
+        lib.CMD_SRC_SET: "(SRC{source_id})",
+
         lib.CMD_BRT_QUERY: "(BRT?)",
-        lib.CMD_BRT_SET: "(BRT{level})"
+        lib.CMD_BRT_SET: "(BRT{level})",
         }
 
 _boolean_commands = (
@@ -72,7 +78,7 @@ def get_source_id(model, source):
     return None
 
 class ProjectorInstance:
-    
+
     def __init__(self, model, ser, timeout=5):
         """Class for managing InFocus projectors
 
@@ -108,8 +114,8 @@ class ProjectorInstance:
         """Read response from projector"""
         read = ""
         res = ""
-        while not read.endswith(")"):
-            r, w, x = select.select([self.serial.fileno()], [], [], self.timeout) 
+        while not re.match('\(.*\)\([-0-9]*,[0-9]*\)', res):
+            r, w, x = select.select([self.serial.fileno()], [], [], self.timeout)
             if len(r) == 0:
                 raise lib.errors.ProjectorError(
                         "Timeout when reading response from projector"
@@ -146,13 +152,13 @@ class ProjectorInstance:
 
         if cmd_str.endswith('?)'):
             ret = self._read_response()
-            while "=" not in ret and ret != 'ERR':
+            while ")" not in ret and ret != '?':
                 ret = self._read_response()
             if ret == '?':
                 xbmc.log("Error, command not understood by projector!")
                 return None
             xbmc.log("No Error!")
-            r = re.match(ret, '\(([-\d]+),(\d+)\)')
+            r = re.match('\(.+\)\(([-\d]+),(\d+)\)', ret)
             ret = r.group(2)
             if cmd_str in _boolean_commands:
                 if ret == "1":
@@ -167,10 +173,10 @@ class ProjectorInstance:
                         _valid_sources_[self.model]
                     ]:
                 ret = [
-                        x for x in 
+                        x for x in
                         _valid_sources_[self.model] if
                             _valid_sources_[self.model][x] == ret][0]
-        
+
             return ret
 
     def send_command(self, command, **kwargs):
