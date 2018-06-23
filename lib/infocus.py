@@ -40,7 +40,7 @@ _command_mapping_ = {
         lib.CMD_SRC_SET: "(SRC{source_id})"
     
         lib.CMD_BRT_QUERY: "(BRT?)",
-        lib.CMD_BRT_SET: "(BRT{source_id})"
+        lib.CMD_BRT_SET: "(BRT{level})"
         }
 
 _serial_options_ = {
