@@ -3,10 +3,14 @@
   <category label="Projector Details">
     <setting label="Serial Device" type="text" id="device" default="/dev/ttyUSB0"/>
     <setting label="Response Read Timeout" type="number" id="timeout" default="5"/>
-    <setting label="Manufacturer" type="select" id="manufacturer" values="Epson" default="Epson"/>
+    <setting label="Manufacturer" type="select" id="manufacturer" values="Epson|InFocus" default="Epson"/>
       <setting label="Model" type="select" id="epson_model" 
         values="TW3200" default="TW3200" 
         visible="eq(-1,Epson)"
+        subsetting="true"/>
+      <setting label="Model" type="select" id="infocus_model"
+        values="IN72/IN74/IN76" default="IN72/IN74/IN76"
+        visible="eq(-1,InFocus)"
         subsetting="true"/>
   </category>
   <category label="Projector Control">
