@@ -8,3 +8,6 @@ CMD_PWR_QUERY="powerquery"
 
 CMD_SRC_QUERY="sourcequery"
 CMD_SRC_SET="sourceset"
+
+CMD_BRT_QUERY="brightnessquery"
+CMD_BRT_SET="brightnessset"
