@@ -9,17 +9,17 @@
   <extension point="xbmc.service" library="service.py" start="login" />
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary lang="en">Automatic start/shutdown of projectors connected by serial port</summary>
+    <summary lang="en">Automatic turn on and off a projector.</summary>
     <description lang="en">
-    Control a serial port connected projector from Kodi. See https://github.com/fredrik-eriksson/kodi_projcontrol for a list of supported projectors. If your projector is missing, please create a github issue with link to the projector API documentation.
+    From Kodi, control a projector connected via a serial port.   Currently support Epson and InFocus projectors.
     
     * Start/shutdown projector at kodi start/exit
     * Start/shutdown projector at Kodi screensaver activation/deactivation
     * Set input source when projector starts
     * Automatically update media library while the projector is off
     * Optional REST API to control the projector from any networked device.
+
+    If your projector is not supported, please create a github issue on https://github.com/fredrik-eriksson/kodi_projcontrol with link to the projector API documentation.
     </description>
   </extension>
 </addon>
-
-
