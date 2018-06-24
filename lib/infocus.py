@@ -17,8 +17,6 @@ import select
 
 import serial
 
-import xbmc
-
 import lib
 import lib.commands
 import lib.errors
@@ -131,7 +129,7 @@ class ProjectorInstance:
                     return None
 
         part = res.split('\n', 1)
-        xbmc.log("projector responded: '{}'".format(part[0]))
+        lib.logmsg("projector responded: '{}'".format(part[0]))
         return part[0]
 
 
@@ -155,9 +153,9 @@ class ProjectorInstance:
             while ")" not in ret and ret != '?':
                 ret = self._read_response()
             if ret == '?':
-                xbmc.log("Error, command not understood by projector!")
+                lib.logmsg("Error, command not understood by projector!")
                 return None
-            xbmc.log("No Error!")
+            lib.logmsg("No Error!")
             r = re.match('\(.+\)\(([-\d]+),(\d+)\)', ret)
             ret = r.group(2)
             if cmd_str in _boolean_commands:
@@ -166,7 +164,7 @@ class ProjectorInstance:
                 elif int(ret) == 0:
                     ret = False
                 else:
-                    xbmc.log("Error, unable to parse boolean value!")
+                    lib.logmsg("Error, unable to parse boolean value!")
                     return None
             elif ret in [
                     _valid_sources_[self.model][x] for x in
@@ -200,7 +198,7 @@ class ProjectorInstance:
         else:
             cmd_str = _command_mapping_[command]
 
-        xbmc.log("sending command '{}'".format(cmd_str))
+        lib.logmsg("sending command '{}'".format(cmd_str))
         res = self._send_command(cmd_str)
-        xbmc.log("send_command returned {}".format(res))
+        lib.logmsg("send_command returned {}".format(res))
         return res

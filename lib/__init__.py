@@ -11,3 +11,8 @@ CMD_SRC_SET="sourceset"
 
 CMD_BRT_QUERY="brightnessquery"
 CMD_BRT_SET="brightnessset"
+
+import xbmc
+
+def logmsg(msg):
+    xbmc.log("projcontrol: %s" % msg)
