@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>
+# This file is covered by the MIT license, read LICENSE for details.
+
 """Module for communicating with Epson projectors supporting the ESC/VP21
 protocol over RS232 serial interface.
 
