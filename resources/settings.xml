@@ -10,7 +10,7 @@
         subsetting="true"/>
       <setting label="Model" type="select" id="infocus_model"
         values="IN72/IN74/IN76" default="IN72/IN74/IN76"
-        visible="eq(-1,InFocus)"
+        visible="eq(-2,InFocus)"
         subsetting="true"/>
   </category>
   <category label="Projector Control">
