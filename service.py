@@ -100,11 +100,11 @@ class ProjectorMonitor(xbmc.Monitor):
 
     def onScreensaverActivated(self):
         if __addon__.getSetting("at_ss_start") == "true":
-            lib.commands.start()
+            lib.commands.stop()
 
     def onScreensaverDeactivated(self):
         if __addon__.getSetting("at_ss_shutdown") == "true":
-            lib.commands.stop()
+            lib.commands.start()
 
     def onSettingsChanged(self):
         if __addon__.getSetting("enabled") == "true":
