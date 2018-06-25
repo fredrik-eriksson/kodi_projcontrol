@@ -27,7 +27,9 @@ import lib.errors
 # Remember to add new models to the settings.xml-file as well
 _valid_sources_ = {
         "IN72/IN74/IN76": {
-            "HDMI":      "0",
+            # Is HDMI in InFocus documentation and menu, but use HDMI1
+            # here to be compatible with Epson and value in settings.xml
+            "HDMI1":     "0",
             "MI-DA":     "1",
             "Component": "2",
             "S-Video":   "3",
