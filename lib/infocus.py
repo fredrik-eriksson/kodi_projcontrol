@@ -99,11 +99,11 @@ class ProjectorInstance:
 
     def _verify_connection(self):
         """Verify that the projecor is ready to receive commands.  Use the
-        (PWR?) command to see if we get a valid response.
+        (LMP?) command to see if we get a valid response.
 
         """
-        res = self._send_command("(PWR?)")
-        if res:
+        res = self._send_command("(LMP?)")
+        if res is not None:
             return True
         return False
 
