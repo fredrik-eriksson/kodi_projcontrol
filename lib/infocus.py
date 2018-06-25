@@ -148,14 +148,14 @@ class ProjectorInstance:
                     )
             return ret
 
-        if cmd_str.endswith('?)'):
+        ret = self._read_response()
+        while ")" not in ret and ret != '?':
             ret = self._read_response()
-            while ")" not in ret and ret != '?':
-                ret = self._read_response()
-            if ret == '?':
-                lib.logmsg("Error, command not understood by projector!")
-                return None
-            lib.logmsg("No Error!")
+        if ret == '?':
+            lib.logmsg("Error, command not understood by projector!")
+            return None
+        lib.logmsg("No Error!")
+        if cmd_str.endswith('?)'):
             r = re.match('\(.+\)\(([-\d]+),(\d+)\)', ret)
             ret = r.group(2)
             if cmd_str in _boolean_commands:
@@ -176,6 +176,8 @@ class ProjectorInstance:
                             _valid_sources_[self.model][x] == ret][0]
 
             return ret
+        else:
+            return None
 
     def send_command(self, command, **kwargs):
         """Send command to the projector.
