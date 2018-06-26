@@ -87,7 +87,7 @@ def do_cmd(command, **kwargs):
         except lib.errors.ProjectorError as pe:
             lib.helpers.display_error_message(str(pe))
         ser.close()
-    xbmc.log("do_cmd returns: {}".format(res))
+    lib.logmsg("do_cmd returns: {}".format(res))
     return res
 
 def start():

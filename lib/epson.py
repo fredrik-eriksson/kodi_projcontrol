@@ -14,8 +14,6 @@ import select
 
 import serial
 
-import xbmc
-
 import lib
 import lib.commands
 import lib.errors
@@ -125,7 +123,7 @@ class ProjectorInstance:
                     return None
 
         part = res.split('\r', 1)
-        xbmc.log("projector responded: '{}'".format(part[0]))
+        lib.logmsg("projector responded: '{}'".format(part[0]))
         return part[0]
 
 
@@ -149,9 +147,9 @@ class ProjectorInstance:
             while "=" not in ret and ret != 'ERR':
                 ret = self._read_response()
             if ret == 'ERR':
-                xbmc.log("Error!")
+                lib.logmsg("Error!")
                 return None
-            xbmc.log("No Error!")
+            lib.logmsg("No Error!")
             ret = ret.split('=', 1)[1]
             if ret == "01":
                 ret = True
@@ -188,9 +186,9 @@ class ProjectorInstance:
         else:
             cmd_str = _command_mapping_[command]
 
-        xbmc.log("sending command '{}'".format(cmd_str))
+        lib.logmsg("sending command '{}'".format(cmd_str))
         res = self._send_command(cmd_str)
-        xbmc.log("send_command returned {}".format(res))
+        lib.logmsg("send_command returned {}".format(res))
         return res
 
 
