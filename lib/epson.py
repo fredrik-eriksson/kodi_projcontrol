@@ -64,6 +64,11 @@ _serial_options_ = {
         "stopbits": serial.STOPBITS_ONE
 }
 
+# The Epson projector require at least 30 seconds between turning it
+# off and turning it on again.  Add 5 seconds to avoid any race
+# condition.
+_coolingduration = 35
+
 def get_valid_sources(model):
     """Return all valid source strings for this model"""
     if model in _valid_sources_:
@@ -203,6 +208,5 @@ class ProjectorInstance:
         log("send_command returned {}".format(res))
         return res
 
-
-
-
+    def coolingduration():
+        return _coolingduration

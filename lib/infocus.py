@@ -59,6 +59,11 @@ _serial_options_ = {
         "stopbits": serial.STOPBITS_ONE
 }
 
+# The InFocus IN72/IN74/IN76 projectors require at least 60 seconds
+# between turning it off and turning it on again.  Add 5 seconds to
+# avoid any race condition.
+_coolingduration = 65
+
 def get_valid_sources(model):
     """Return all valid source strings for this model"""
     if model in _valid_sources_:
@@ -200,3 +205,6 @@ class ProjectorInstance:
         res = self._send_command(cmd_str)
         log("send_command returned {}".format(res))
         return res
+
+    def coolingduration():
+        return _coolingduration

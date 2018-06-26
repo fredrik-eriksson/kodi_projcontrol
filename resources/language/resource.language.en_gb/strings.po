@@ -65,10 +65,6 @@ msgctxt "#32015"
 msgid "Start projector when screensaver deactivates"
 msgstr ""
 
-msgctxt "#32016"
-msgid "Minimum interval between projector shutdown and startup"
-msgstr ""
-
 msgctxt "#32017"
 msgid "Set input source on projector after projector starts"
 msgstr ""
