@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>
-# This file is covered by the MIT license, read LICENSE for details.
+# This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
 """Module for communicating with Epson projectors supporting the ESC/VP21
 protocol over RS232 serial interface.
@@ -14,9 +14,10 @@ import select
 
 import serial
 
-import lib
 import lib.commands
 import lib.errors
+
+from lib.helpers import log
 
 # List of all valid models and their input sources
 # Remember to add new models to the settings.xml-file as well
@@ -123,7 +124,7 @@ class ProjectorInstance:
                     return None
 
         part = res.split('\r', 1)
-        lib.logmsg("projector responded: '{}'".format(part[0]))
+        log("projector responded: '{}'".format(part[0]))
         return part[0]
 
 
@@ -147,9 +148,9 @@ class ProjectorInstance:
             while "=" not in ret and ret != 'ERR':
                 ret = self._read_response()
             if ret == 'ERR':
-                lib.logmsg("Error!")
+                log("Error!")
                 return None
-            lib.logmsg("No Error!")
+            log("No Error!")
             ret = ret.split('=', 1)[1]
             if ret == "01":
                 ret = True
@@ -186,9 +187,9 @@ class ProjectorInstance:
         else:
             cmd_str = _command_mapping_[command]
 
-        lib.logmsg("sending command '{}'".format(cmd_str))
+        log("sending command '{}'".format(cmd_str))
         res = self._send_command(cmd_str)
-        lib.logmsg("send_command returned {}".format(res))
+        log("send_command returned {}".format(res))
         return res
 
 

@@ -2,7 +2,7 @@
 
 # -*- coding: utf-8 -*-
 # Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>
-# This file is covered by the MIT license, read LICENSE for details.
+# This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
 import os
 import argparse
@@ -28,7 +28,7 @@ __server__ = None
 
 def server_available():
     if not __server_available__ and __addon__.getSetting("enabled") == "true":
-        lib.helpers.display_error_message("REST API not available, see https://github.com/fredrik-eriksson/kodi_projcontrol for possible reasons")
+        lib.helpers.display_error_message(32200)
     return __server_available__
 
 def restart_server():
@@ -47,12 +47,10 @@ def restart_server():
     xbmc.sleep(1000)
     if not __server__.isAlive():
         __server__.join()
-        lib.helpers.display_error_message(
-                "Failed to start projector web server,\n"\
-                "Try to disable and reenable addon")
+        lib.helpers.display_error_message(32201)
         __server__ = None
     else:
-        lib.helpers.display_message("Started projector server at {}:{}".format(address,port))
+        lib.helpers.display_message(32300, " {}:{}".format(address,port))
 
 
 def stop_server():
@@ -64,7 +62,7 @@ def stop_server():
     if __server__:
         lib.server.stop_server()
         __server__.join()
-        lib.helpers.display_message("Projector API stopped")
+        lib.helpers.display_message(32301)
     __server__ = None
 
 

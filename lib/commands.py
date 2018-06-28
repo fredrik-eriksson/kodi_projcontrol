@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>
-# This file is covered by the MIT license, read LICENSE for details.
+# This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
 """High level commands that can be used on the projectors"""
 import os
@@ -46,7 +46,7 @@ def open_proj():
     try:
         mod = _get_proj_module_()
     except lib.errors.ConfigurationError as e:
-        lib.helpers.display_error_message(e)
+        lib.helpers.display_error_message(32203)
         return None
     
     kwargs = mod.get_serial_options()
@@ -55,9 +55,7 @@ def open_proj():
         s = serial.Serial( __addon__.getSetting("device"), **kwargs)
         return s
     except (OSError, serial.SerialException) as e:
-        lib.helpers.display_error_message(
-                "Error when opening projector serial device: {}".format(e)
-                )
+        lib.helpers.display_error_message(32204)
         return None
 
 def do_cmd(command, **kwargs):
@@ -79,15 +77,15 @@ def do_cmd(command, **kwargs):
                     ser, 
                     int(__addon__.getSetting("timeout")))
         except lib.errors.ProjectorError as pe:
-            lib.helpers.display_error_message(str(pe))
+            lib.helpers.display_error_message(32205)
             return res
 
         try:
             res = proj.send_command(command, **kwargs)
         except lib.errors.ProjectorError as pe:
-            lib.helpers.display_error_message(str(pe))
+            lib.helpers.display_error_message(32206)
         ser.close()
-    lib.logmsg("do_cmd returns: {}".format(res))
+    lib.helpers.log("do_cmd returns: {}".format(res))
     return res
 
 def start():
@@ -113,15 +111,13 @@ def toggle_power():
         start()
 
 def report():
-    """Report current power status and used source. The report is both returned
-    as a dict and displayed as a kodi notification.
+    """Report current power status and used source.
     
     :return: a dict containing 'power' and 'source' entries.
     """
 
     pwr = do_cmd(lib.CMD_PWR_QUERY)
     src = do_cmd(lib.CMD_SRC_QUERY)
-    lib.helpers.display_message("Power on: {}\nSource: {}".format(pwr, src))
     return {"power": pwr, "source": src}
 
 def set_source(source):
@@ -134,9 +130,7 @@ def set_source(source):
     model = _get_configured_model_()
     src_id = mod.get_source_id(model, source)
     if not src_id:
-        lib.helpers.display_error_message(
-                "Invalid source '{}' for this model".format(source)
-        )
+        lib.helpers.display_error_message(32207, ": {}".format(source))
         return False
     do_cmd(lib.CMD_SRC_SET, source_id=src_id)
     return True

@@ -121,3 +121,58 @@ msgctxt "#32033"
 msgid "Listen Port"
 msgstr ""
 
+
+
+msgctxt "#32100"
+msgid "Projector Command Failed"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Report From Projector"
+msgstr ""
+
+
+# Errors
+
+msgctxt "#32200"
+msgid "REST API not available, see https://github.com/fredrik-eriksson/kodi_projcontrol for possible reasons"
+msgstr ""
+
+msgctxt "#32201"
+msgid "Failed to start API web server, Try to disable and reenable addon"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Failed to start projector web server, Try to disable and reenable addon"
+msgstr ""
+
+msgctxt "#32203"
+msgid "Configuration error: unsupported manufacturer"
+msgstr ""
+
+msgctxt "#32204"
+msgid "Failed to open projector serial device"
+msgstr ""
+
+msgctxt "#32205"
+msgid "Failed to send command to projector"
+msgstr ""
+
+msgctxt "#32206"
+msgid "Error when sending command to projector"
+msgstr ""
+
+msgctxt "#32207"
+msgid "Configuration error: invalid source for this model"
+msgstr ""
+
+
+# Informational
+
+msgctxt "#32300"
+msgid "Started projector API at"
+msgstr ""
+
+msgctxt "#32301"
+msgid "Projector API stopped"
+msgstr ""

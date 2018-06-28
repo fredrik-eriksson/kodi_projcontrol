@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2015,218 Fredrik Eriksson <git@wb9.se>
+# Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>
 #               2018 Petter Reinholdtsen <pere@hungry.com>
 # This file is covered by the MIT license, read LICENSE for details.
 
@@ -17,9 +17,9 @@ import select
 
 import serial
 
-import lib
 import lib.commands
 import lib.errors
+from lib.helpers import log
 
 # List of all valid models and their input sources
 # Remember to add new models to the settings.xml-file as well
@@ -126,7 +126,7 @@ class ProjectorInstance:
                     return None
 
         part = res.split('\n', 1)
-        lib.logmsg("projector responded: '{}'".format(part[0]))
+        log("projector responded: '{}'".format(part[0]))
         return part[0]
 
 
@@ -149,9 +149,9 @@ class ProjectorInstance:
         while ")" not in ret and ret != '?':
             ret = self._read_response()
         if ret == '?':
-            lib.logmsg("Error, command not understood by projector!")
+            log("Error, command not understood by projector!")
             return None
-        lib.logmsg("No Error!")
+        log("No Error!")
         if cmd_str.endswith('?)'):
             r = re.match('\(.+\)\(([-\d]+),(\d+)\)', ret)
             ret = r.group(2)
@@ -161,7 +161,7 @@ class ProjectorInstance:
                 elif int(ret) == 0:
                     ret = False
                 else:
-                    lib.logmsg("Error, unable to parse boolean value!")
+                    log("Error, unable to parse boolean value!")
                     return None
             elif ret in [
                     _valid_sources_[self.model][x] for x in
@@ -197,7 +197,7 @@ class ProjectorInstance:
         else:
             cmd_str = _command_mapping_[command]
 
-        lib.logmsg("sending command '{}'".format(cmd_str))
+        log("sending command '{}'".format(cmd_str))
         res = self._send_command(cmd_str)
-        lib.logmsg("send_command returned {}".format(res))
+        log("send_command returned {}".format(res))
         return res

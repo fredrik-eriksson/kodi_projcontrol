@@ -121,3 +121,54 @@ msgctxt "#32033"
 msgid "Listen Port"
 msgstr "Port att lyssna på"
 
+
+
+msgctxt "#32100"
+msgid "Projector Command Failed"
+msgstr "Projektorkommando misslyckades"
+
+msgctxt "#32101"
+msgid "Report From Projector"
+msgstr "Rapport från projektor"
+
+
+# Errors
+
+msgctxt "#32200"
+msgid "REST API not available, see https://github.com/fredrik-eriksson/kodi_projcontrol for possible reasons"
+msgstr "Det går inte att aktivera REST API, se https://github.com/fredrik-eriksson/kodi_projcontrol för möjliga orsaker"
+
+msgctxt "#32201"
+msgid "Failed to start API web server, Try to disable and reenable addon"
+msgstr "Misslyckades med att starta API-server, prova att avaktivera och aktivera tillägget"
+
+msgctxt "#32203"
+msgid "Configuration error: unsupported manufacturer"
+msgstr "Konfigurationsfel: okänd tillverkare"
+
+msgctxt "#32204"
+msgid "Failed to open projector serial device"
+msgstr "Misslyckades med att öppna serieportsanslutningen"
+
+msgctxt "#32205"
+msgid "Failed to send command to projector"
+msgstr "Misslyckades med att skicka kommando till projektorn"
+
+msgctxt "#32206"
+msgid "Error when sending command to projector"
+msgstr "Fel i kommunikation med projektorn"
+
+msgctxt "#32207"
+msgid "Configuration error: invalid source for this model"
+msgstr "Konfigurationsfel: ogiltig källa för projektormodellen"
+
+
+# Informational
+
+msgctxt "#32300"
+msgid "Started projector API at"
+msgstr "Projektor-API startat på"
+
+msgctxt "#32301"
+msgid "Projector API stopped"
+msgstr "Projektor-API avstängt"
