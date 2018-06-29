@@ -148,9 +148,9 @@ class ProjectorInstance:
             while "=" not in ret and ret != 'ERR':
                 ret = self._read_response()
             if ret == 'ERR':
-                log("Error!")
+                log("Projector responded with Error!")
                 return None
-            log("No Error!")
+            log("Command sent successfully")
             ret = ret.split('=', 1)[1]
             if ret == "01":
                 ret = True

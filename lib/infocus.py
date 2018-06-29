@@ -151,7 +151,7 @@ class ProjectorInstance:
         if ret == '?':
             log("Error, command not understood by projector!")
             return None
-        log("No Error!")
+        log("Command sent successfully!")
         if cmd_str.endswith('?)'):
             r = re.match('\(.+\)\(([-\d]+),(\d+)\)', ret)
             ret = r.group(2)
