@@ -6,6 +6,7 @@
 
 import os
 import argparse
+import datetime
 import select
 import threading
 
@@ -73,6 +74,8 @@ class ProjectorMonitor(xbmc.Monitor):
     _update_lock_ = threading.Lock()
     _ongoing_updates_ = set()
     _update_timer_ = None
+    _ss_activation_timer_ = None
+    _last_power_command_ = datetime.datetime.fromtimestamp(0)
 
     def update_libraries(self):
         """Called by the timer to start a new library update if the projector
@@ -90,18 +93,30 @@ class ProjectorMonitor(xbmc.Monitor):
         
     def cleanup(self):
         """Remove any lingering timer before exit"""
+        if self._ss_activation_timer_:
+            self._ss_activation_timer_.cancel()
+    
         with self._update_lock_:
             if self._update_timer_:
                 self._update_timer_.cancel()
                 self._update_timer_ = None
-    
 
     def onScreensaverActivated(self):
         if __addon__.getSetting("at_ss_start") == "true":
-            lib.commands.stop()
+            self._ss_activation_timer_ = threading.Timer(
+                    int(__addon__.getSetting("at_ss_start_delay")),
+                    lib.commands.stop)
+            self._ss_activation_timer_.start()
 
     def onScreensaverDeactivated(self):
+        if self._ss_activation_timer_:
+            self._ss_activation_timer_.cancel()
+
         if __addon__.getSetting("at_ss_shutdown") == "true":
+            min_turnaround = int(__addon__.getSetting("min_turnaround"))
+            time_since_stop = datetime.datetime.now() - _last_power_command_
+            if time_since_stop.days == 0 and time_since_stop.seconds < min_turnaround:
+                xbmc.sleep((min_turnaround-time_since_stop.seconds)*1000)
             lib.commands.start()
 
     def onSettingsChanged(self):
