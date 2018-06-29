@@ -4,9 +4,10 @@
 # Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>
 # This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
-import os
 import argparse
 import datetime
+import multiprocessing
+import os
 import select
 import threading
 
@@ -42,11 +43,11 @@ def restart_server():
     stop_server()
     port = int(__addon__.getSetting("port"))
     address = __addon__.getSetting("address")
-    __server__ = threading.Thread(target=lib.server.init_server, args=(port, address))
+    __server__ = multiprocessing.Process(target=lib.server.init_server, args=(port, address))
     __server__.start()
     # wait one second and make sure the server has started
     xbmc.sleep(1000)
-    if not __server__.isAlive():
+    if not __server__.is_alive():
         __server__.join()
         lib.helpers.display_error_message(32201)
         __server__ = None
@@ -61,7 +62,7 @@ def stop_server():
 
     global __server__
     if __server__:
-        lib.server.stop_server()
+        __server__.terminate()
         __server__.join()
         lib.helpers.display_message(32301)
     __server__ = None
