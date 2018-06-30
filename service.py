@@ -19,6 +19,9 @@ import xbmcgui
 import lib
 import lib.epson
 import lib.errors
+
+from lib.helpers import log
+
 try:
     import lib.server
     __server_available__ = True
@@ -104,20 +107,24 @@ class ProjectorMonitor(xbmc.Monitor):
 
     def onScreensaverActivated(self):
         if __addon__.getSetting("at_ss_start") == "true":
-            self._ss_activation_timer_ = threading.Timer(
-                    int(__addon__.getSetting("at_ss_start_delay")),
-                    lib.commands.stop)
+            delay = int(__addon__.getSetting("at_ss_start_delay"))
+            log("Screensaver activated, scheduling projector shutdown")
+            self._ss_activation_timer_ = threading.Timer(delay, lib.commands.stop)
+            self._last_power_command_ = datetime.datetime.now() + datetime.timedelta(seconds=delay)
             self._ss_activation_timer_.start()
 
     def onScreensaverDeactivated(self):
         if self._ss_activation_timer_:
+            log("Screensaver deactivated, aborting any scheduled projector shutdown")
             self._ss_activation_timer_.cancel()
 
         if __addon__.getSetting("at_ss_shutdown") == "true":
             min_turnaround = int(__addon__.getSetting("min_turnaround"))
-            time_since_stop = datetime.datetime.now() - _last_power_command_
+            time_since_stop = datetime.datetime.now() - self._last_power_command_
             if time_since_stop.days == 0 and time_since_stop.seconds < min_turnaround:
+                log("Screensaver deactivated too soon, will sleep a while before starting projector")
                 xbmc.sleep((min_turnaround-time_since_stop.seconds)*1000)
+            log("Screensaver deactivated, starting projector")
             lib.commands.start()
 
     def onSettingsChanged(self):
@@ -165,7 +172,8 @@ if __name__ == '__main__':
         if monitor.waitForAbort(10):
             break
 
+    log("Shutting down addon")
     stop_server()
     monitor.cleanup()
-    if __addon__.getSetting("at_shutdown"):
+    if __addon__.getSetting("at_shutdown") == "true":
         lib.commands.stop(final_shutdown=True)
