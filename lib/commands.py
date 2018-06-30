@@ -91,7 +91,7 @@ def do_cmd(command, **kwargs):
 def start():
     """Start the projector"""
     do_cmd(lib.CMD_PWR_ON)
-    if __addon__.getSetting("set_input"):
+    if __addon__.getSetting("set_input") == "true":
         set_source(__addon__.getSetting("input_source"))
 
 def stop(final_shutdown=False):
