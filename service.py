@@ -128,6 +128,9 @@ class ProjectorMonitor(xbmc.Monitor):
             lib.commands.start()
 
     def onSettingsChanged(self):
+        global __addon__
+        __addon__ = xbmcaddon.Addon()
+
         if __addon__.getSetting("enabled") == "true":
             restart_server()
         else:
