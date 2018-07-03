@@ -78,12 +78,15 @@ def do_cmd(command, **kwargs):
                     int(__addon__.getSetting("timeout")))
         except lib.errors.ProjectorError as pe:
             lib.helpers.display_error_message(32205)
+            lib.helpers.log("Failed to open projector: {}".format(pe))
+            ser.close()
             return res
 
         try:
             res = proj.send_command(command, **kwargs)
         except lib.errors.ProjectorError as pe:
             lib.helpers.display_error_message(32206)
+            lib.helpers.log("Failed to send command to projector: {}".format(pe))
         ser.close()
     lib.helpers.log("do_cmd returns: {}".format(res))
     return res
