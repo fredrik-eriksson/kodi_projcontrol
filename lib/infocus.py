@@ -109,7 +109,8 @@ class ProjectorInstance:
         """Read response from projector"""
         read = ""
         res = ""
-        while not re.match('\(.*\)\([-0-9]*,[0-9]*\)', res):
+        # Match either (PWR0) or (LMP?)(0-65535,2344)
+        while not re.match('(\([^?]*\)|\(.*\?\)\([-0-9]*,[0-9]*\))', res):
             r, w, x = select.select([self.serial.fileno()], [], [], self.timeout)
             if len(r) == 0:
                 raise lib.errors.ProjectorError(
