@@ -3,6 +3,7 @@
 # This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
 """High level commands that can be used on the projectors"""
+import multiprocessing
 import os
 
 import serial
@@ -17,6 +18,7 @@ import lib.errors
 import lib.helpers
 
 __addon__ =  xbmcaddon.Addon()
+__cmd_lock__ = multiprocessing.Lock()
 
 def _get_proj_module_():
     manufacturer = __addon__.getSetting("manufacturer")
@@ -67,27 +69,28 @@ def do_cmd(command, **kwargs):
     :return: output from projector or None
     """
     res = None
-    ser = open_proj()
-    if ser:
-        try:
-            mod = _get_proj_module_()
-            model = _get_configured_model_()
-            proj = mod.ProjectorInstance(
-                    model,
-                    ser, 
-                    int(__addon__.getSetting("timeout")))
-        except lib.errors.ProjectorError as pe:
-            lib.helpers.display_error_message(32205)
-            lib.helpers.log("Failed to open projector: {}".format(pe))
-            ser.close()
-            return res
+    with __cmd_lock__:
+        ser = open_proj()
+        if ser:
+            try:
+                mod = _get_proj_module_()
+                model = _get_configured_model_()
+                proj = mod.ProjectorInstance(
+                        model,
+                        ser, 
+                        int(__addon__.getSetting("timeout")))
+            except lib.errors.ProjectorError as pe:
+                lib.helpers.display_error_message(32205)
+                lib.helpers.log("Failed to open projector: {}".format(pe))
+                ser.close()
+                return res
 
-        try:
-            res = proj.send_command(command, **kwargs)
-        except lib.errors.ProjectorError as pe:
-            lib.helpers.display_error_message(32206)
-            lib.helpers.log("Failed to send command to projector: {}".format(pe))
-        ser.close()
+            try:
+                res = proj.send_command(command, **kwargs)
+            except lib.errors.ProjectorError as pe:
+                lib.helpers.display_error_message(32206)
+                lib.helpers.log("Failed to send command to projector: {}".format(pe))
+            ser.close()
     lib.helpers.log("do_cmd returns: {}".format(res))
     return res
 
