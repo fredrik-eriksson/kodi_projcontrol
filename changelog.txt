@@ -1,14 +1,14 @@
-v1.2 - ???
+v1.2.0 - 2018-07-09
 - Made strings localizeable (is that a word?) and added Swedish translation
 - Made API service optional
 - Add support to turn on/off projector at Kodi startup and shutdown
 - Add support to turn on/off projector at screensaver (de)activation
 - Add support for InFocus projectors IN72/IN74/IN76
 
-v1.1 - 2015-11-09
+v1.1.0 - 2015-11-09
 - Replace twisted with flask
 - Use py-serial to configure serial port
 - fixed regular library updates
 
-v1.0 - 2015-06-27
+v1.0.0 - 2015-06-27
 - Initial release
