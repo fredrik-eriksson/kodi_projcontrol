@@ -2,19 +2,18 @@
 # Copyright (c) 2015 Fredrik Eriksson <git@wb9.se>
 # This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
-import sys
+import multiprocessing
 
 import xbmc
 import xbmcaddon
 import xbmcgui
 
-ADDON = xbmcaddon.Addon()
-
+__addon__ = xbmcaddon.Addon()
 
 def display_error_message(
         message_id,
         append="",
-        title=ADDON.getLocalizedString(32100).encode('utf-8'),
+        title=__addon__.getLocalizedString(32100).encode('utf-8'),
         type_=xbmcgui.NOTIFICATION_ERROR,
         time=1000,
         sound=True):
@@ -30,7 +29,7 @@ def display_error_message(
 def display_message(
         message_id, 
         append="",
-        title=ADDON.getLocalizedString(32101).encode('utf-8'), 
+        title=__addon__.getLocalizedString(32101).encode('utf-8'), 
         type_=xbmcgui.NOTIFICATION_INFO,
         time=5000,
         sound=False):
@@ -39,11 +38,11 @@ def display_message(
     dialog = xbmcgui.Dialog()
     dialog.notification(
             title, 
-            "{}{}".format(ADDON.getLocalizedString(message_id).encode('utf-8'), append),
+            "{}{}".format(__addon__.getLocalizedString(message_id).encode('utf-8'), append),
             type_,
             time,
             sound)
 
-
 def log(message):
     xbmc.log("projcontrol: {}".format(message), level=xbmc.LOGDEBUG)
+
