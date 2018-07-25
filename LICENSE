@@ -30,4 +30,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---
 
 Note that icon.png is taken from Googles Noto Emoji Objects Icons, and is 
-licensed under a different license. See icon_license.txt
+licensed under a different license. Icon has been modified from the original;
+it has been resized and transparent areas has been colored black. 
+See icon_license.txt for icon license terms.
