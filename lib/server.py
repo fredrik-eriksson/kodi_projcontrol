@@ -2,25 +2,27 @@
 # Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>
 # This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
+import json
 import logging
 
-import flask
+from bottle import get, post, request, response, run
 
 import lib.commands
 
-app = flask.Flask(__name__)
-app.config.from_object(__name__)
-
-@app.route('/')
+@get('/')
 def start():
-    return flask.jsonify([ "power", "source"])
+    response.content_type = "application/json"
+    return json.dumps([ "power", "source"])
 
-@app.route('/power', methods=['POST', 'GET'])
+@get('/power')
 def power():
-    if flask.request.method == 'GET':
-        return flask.jsonify(lib.commands.report())
+    response.content_type = "application/json"
+    return json.dumps(lib.commands.report())
 
-    data = flask.request.get_json()
+@post('/power')
+def power_req():
+    response.content_type = "application/json"
+    data = request.json
     ret = {'success': False}
     if data == 'on':
         lib.commands.start()
@@ -31,27 +33,28 @@ def power():
     elif data == 'toggle':
         lib.commands.toggle_power()
         ret['success'] = True
-    return flask.jsonify(ret)
+    return json.dumps(ret)
 
-@app.route('/source', methods=['POST', 'GET'])
+@get('/source')
 def source():
+    response.content_type = "application/json"
     valid_sources = lib.commands.get_available_sources()
-    if flask.request.method == 'GET':
-        return flask.jsonify({'sources': valid_sources})
+    return flask.jsonify({'sources': valid_sources})
 
-    data = flask.request.get_json()
+@post('/source')
+def source_req():
+    response.content_type = "application/json"
+    valid_sources = lib.commands.get_available_sources()
+    data = request.json
     if data in valid_sources:
-        return flask.jsonify({'success': lib.commands.set_source(data)})
-    return flask.jsonify({'success': False})
+        return json.loads({'success': lib.commands.set_source(data)})
+    return json.loads({'success': False})
 
 
 def init_server(port, address):
-    """Start the flask web server.
+    """Start the bottle web server.
     
     :param port: port to listen on
     :param address: address to bind to
     """
-    log = logging.getLogger('werkzeug')
-    log.setLevel(logging.ERROR)
-
-    app.run(host=address, port=port)
+    run(host=address, port=port)

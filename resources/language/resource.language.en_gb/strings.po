@@ -106,7 +106,7 @@ msgstr ""
 # empty strings #32026-32029
 
 msgctxt "#32030"
-msgid "REST API (Advanced)"
+msgid "REST API"
 msgstr ""
 
 msgctxt "#32031"

@@ -22,7 +22,7 @@ __server__ = None
 
 def server_available():
     if not __server_available__ and __addon__.getSetting("enabled") == "true":
-        display_error_message(32200)
+        lib.helpers.display_error_message(32200)
     return __server_available__
 
 def restart_server():

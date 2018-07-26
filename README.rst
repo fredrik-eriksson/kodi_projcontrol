@@ -13,7 +13,7 @@ Features
 Requirements
 ------------
 * py-serial
-* flask (Optional, but required for the REST API)
+* bottle
 * A supported projector connected over serial interface
 * Kodi installation (only tested on Linux)
 
@@ -30,8 +30,6 @@ Copy repository to your Kodi addon directory (usually ~/.kodi/addons) and rename
 
 REST API
 --------
-To use the REST API you need to have flask installed. If flask is missing you will get a message telling you that the REST API is not available.
-
 After configuring and enabling the REST API from Kodi you can test it using curl
 
 .. code-block:: shell

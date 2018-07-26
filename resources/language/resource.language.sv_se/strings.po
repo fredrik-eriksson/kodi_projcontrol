@@ -106,8 +106,8 @@ msgstr "Uppdatera varje (minuter)"
 # empty strings #32026-32029
 
 msgctxt "#32030"
-msgid "REST API (Advanced)"
-msgstr "REST API (Avancerat)"
+msgid "REST API"
+msgstr "REST API"
 
 msgctxt "#32031"
 msgid "Enable REST API"
