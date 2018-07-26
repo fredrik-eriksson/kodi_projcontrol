@@ -1,3 +1,8 @@
+v1.3.0 - 
+- replaced flask with bottle
+- some restructuring
+- other changes required for inclusion in official Kodi repository
+
 v1.2.0 - 2018-07-09
 - Made strings localizeable (is that a word?) and added Swedish translation
 - Made API service optional

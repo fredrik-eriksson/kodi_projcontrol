@@ -101,9 +101,7 @@ class ProjectorInstance:
 
         """
         res = self._send_command("(LMP?)")
-        if res is not None:
-            return True
-        return False
+        return res is not None
 
     def _read_response(self):
         """Read response from projector"""
