@@ -6,6 +6,7 @@ import json
 import logging
 
 from bottle import get, post, request, response, run
+import simplejson
 
 import lib.commands
 
@@ -22,8 +23,13 @@ def power():
 @post('/power')
 def power_req():
     response.content_type = "application/json"
-    data = request.json
     ret = {'success': False}
+    
+    try:
+        data = request.json
+    except (simplejson.JSONDecodeError, ValueError) as e:
+        return json.dumps(ret)
+
     if data == 'on':
         lib.commands.start()
         ret['success'] = True
@@ -45,10 +51,15 @@ def source():
 def source_req():
     response.content_type = "application/json"
     valid_sources = lib.commands.get_available_sources()
-    data = request.json
+    ret = {'success': False}
+    try:
+        data = request.json
+    except (simplejson.JSONDecodeError, ValueError) as e:
+        return json.dumps(ret)
+
     if data in valid_sources:
-        return json.loads({'success': lib.commands.set_source(data)})
-    return json.loads({'success': False})
+        ret['success'] = lib.commands.set_source(data)
+    return json.dumps(ret)
 
 
 def init_server(port, address):
