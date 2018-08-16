@@ -5,6 +5,7 @@
 import json
 import logging
 
+import bottle
 from bottle import get, post, request, response, run
 import simplejson
 
