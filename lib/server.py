@@ -46,7 +46,7 @@ def power_req():
 def source():
     response.content_type = "application/json"
     valid_sources = lib.commands.get_available_sources()
-    return flask.jsonify({'sources': valid_sources})
+    return json.dumps({'sources': valid_sources})
 
 @post('/source')
 def source_req():
