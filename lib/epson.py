@@ -56,7 +56,7 @@ _serial_options_ = {
 def get_valid_sources(model):
     """Return all valid source strings for this model"""
     if model in _valid_sources_:
-        return _valid_sources_[model].keys()
+        return list(_valid_sources_[model].keys())
     return None
 
 def get_serial_options():
