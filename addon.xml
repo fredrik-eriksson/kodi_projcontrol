@@ -18,7 +18,7 @@
     <description lang="sv_SE">Hantera en projektor ansluten via serieport, via Kodi. Se https://github.com/fredrik-eriksson/kodi_projcontrol (Endast på engelska) för vilka projektorer och funktioner som stöds.</description>
     <description lang="nb_NO">Styr en prosjektør som er koblet til Kodi via seriellport.  Se https://github.com/fredrik-eriksson/kodi_projcontrol (kun på engelsk) over oversikt over hvilke prosjektører og funksjoner som støttes.</description>
 
-    <news>v1.3.0 
+    <news>v1.3.0 - 2018-08-16
 - replaced flask dependency with bottle
 - some restructuring
 - other changes required for inclusion in official Kodi repository
