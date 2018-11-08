@@ -69,7 +69,7 @@ class ProjectorMonitor(xbmc.Monitor):
             time_since_stop = datetime.datetime.now() - self._last_power_command_
             if time_since_stop.days == 0 and time_since_stop.seconds < min_turnaround:
                 lib.helpers.log("Screensaver deactivated too soon, will sleep a while before starting projector")
-                monitor.waitForAbort((min_turnaround-time_since_stop.seconds)*1000)
+                self.waitForAbort((min_turnaround-time_since_stop.seconds)*1000)
             lib.helpers.log("Screensaver deactivated, starting projector")
             lib.commands.start()
 
