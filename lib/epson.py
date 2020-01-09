@@ -33,6 +33,17 @@ _valid_sources_ = {
             "Video":                "40",
             "RCA":                  "41",
             "S-Video":              "42"
+            },
+        "PowerLite 820p": {
+            "Computer1/Analog RGB":             "11",
+            "Computer1/Digital RGB":            "12",
+            "Computer1/RGB-Video":              "13",
+            "Computer2/Component - Analog RGB": "21",
+            "Computer2/Component - RGB-Video":  "22",
+            "Computer2/Component - YCbCr":      "23",
+            "Computer2/Component - YPbPr":      "24",
+            "Video":                            "41",
+            "S-Video":                          "42",
             }
         }
 
