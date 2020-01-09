@@ -20,6 +20,7 @@ Requirements
 Supported Projectors
 --------------------
 * Epson TW3200
+* Epson PowerLite 820p
 * InFocus IN72/IN74/IN76
 
 It should be a trivial task to add support for more projectors; if you have one that you want support for, please create a github issue at https://github.com/fredrik-eriksson/kodi_projcontrol. The same if you have a projector that isn't from epson but still supports power and source control over serial interface; if the protocol isn't very exotic it should be fairly simple to add support for that as well.
