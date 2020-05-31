@@ -2,7 +2,7 @@
 # Copyright (c) 2018 Fredrik Eriksson <git@wb9.se>
 # This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
-import multiprocessing
+import threading
 
 import xbmc
 import xbmcaddon
@@ -40,7 +40,7 @@ def restart_server():
 
     port = int(__addon__.getSetting("port"))
     address = __addon__.getSetting("address")
-    __server__ = multiprocessing.Process(target=lib.server.init_server, args=(port, address))
+    __server__ = threading.Thread(target=lib.server.init_server, args=(port, address))
     __server__.start()
     # wait one second and make sure the server has started
     xbmc.sleep(1000)
@@ -63,7 +63,7 @@ def stop_server():
 
     global __server__
     if __server__:
-        __server__.terminate()
+        lib.server.stop_server()
         __server__.join()
         lib.helpers.display_message(32301)
     __server__ = None
