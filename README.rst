@@ -23,7 +23,21 @@ Supported Projectors
 * Epson PowerLite 820p
 * InFocus IN72/IN74/IN76
 
-It should be a trivial task to add support for more projectors; if you have one that you want support for, please create a github issue at https://github.com/fredrik-eriksson/kodi_projcontrol. The same if you have a projector that isn't from epson but still supports power and source control over serial interface; if the protocol isn't very exotic it should be fairly simple to add support for that as well.
+It should be a trivial task to add support for more projectors with serial connections. However I can't test any new implementation
+without having a projector of that model. While I wouldn't mind if you send me 
+projectors of different brands and models, you will probably find it cheaper to learn a little python and implement it yourself.
+PR:s are always welcome.
+
+That said; if you have a projector that you want support for, please create a github
+issue at https://github.com/fredrik-eriksson/kodi_projcontrol. At minimum the following information is required to implement 
+support for a projector:
+
+* connection settings (baudrate, bytesize, parity and stopbits)
+* command syntax
+* response syntax (for both get and set commands)
+* how to verify projector is accepting commands (if possible)
+* how to detect and handle error-responses 
+
 
 Usage
 -----
