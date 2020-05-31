@@ -3,7 +3,7 @@
 # This file is covered by the BSD-3-Clause license, read LICENSE for details.
 
 """High level commands that can be used on the projectors"""
-import multiprocessing
+import threading
 import os
 
 import serial
@@ -18,7 +18,7 @@ import lib.errors
 import lib.helpers
 
 __addon__ =  xbmcaddon.Addon()
-__cmd_lock__ = multiprocessing.Lock()
+__cmd_lock__ = threading.Lock()
 
 def _get_proj_module_():
     manufacturer = __addon__.getSetting("manufacturer")

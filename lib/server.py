@@ -6,29 +6,42 @@ import json
 import logging
 
 import bottle
-from bottle import get, post, request, response, run
-import simplejson
+import wsgiref.simple_server
 
 import lib.commands
 
-@get('/')
+
+class StoppableWSGIRefServer(bottle.ServerAdapter):
+    server = None
+
+    def run(self, handler):
+        self.server = wsgiref.simple_server.make_server(self.host, self.port, handler, **self.options)
+        self.server.serve_forever()
+
+    def stop(self):
+        self.server.shutdown()
+
+
+app = bottle.Bottle()
+
+@app.get('/')
 def start():
-    response.content_type = "application/json"
+    bottle.response.content_type = "application/json"
     return json.dumps([ "power", "source"])
 
-@get('/power')
+@app.get('/power')
 def power():
-    response.content_type = "application/json"
+    bottle.response.content_type = "application/json"
     return json.dumps(lib.commands.report())
 
-@post('/power')
+@app.post('/power')
 def power_req():
-    response.content_type = "application/json"
+    bottle.response.content_type = "application/json"
     ret = {'success': False}
-    
+
     try:
-        data = request.json
-    except (simplejson.JSONDecodeError, ValueError) as e:
+        data = bottle.request.json
+    except ValueError as e:
         return json.dumps(ret)
 
     if data == 'on':
@@ -42,31 +55,40 @@ def power_req():
         ret['success'] = True
     return json.dumps(ret)
 
-@get('/source')
+@app.get('/source')
 def source():
-    response.content_type = "application/json"
+    bottle.response.content_type = "application/json"
     valid_sources = lib.commands.get_available_sources()
     return json.dumps({'sources': valid_sources})
 
-@post('/source')
+@app.post('/source')
 def source_req():
-    response.content_type = "application/json"
+    bottle.response.content_type = "application/json"
     valid_sources = lib.commands.get_available_sources()
     ret = {'success': False}
     try:
-        data = request.json
-    except (simplejson.JSONDecodeError, ValueError) as e:
+        data = bottle.request.json
+    except ValueError as e:
         return json.dumps(ret)
 
     if data in valid_sources:
         ret['success'] = lib.commands.set_source(data)
     return json.dumps(ret)
 
+_server_ = None
 
 def init_server(port, address):
     """Start the bottle web server.
-    
+
     :param port: port to listen on
     :param address: address to bind to
     """
-    run(host=address, port=port)
+    global _server_
+    if _server_:
+        stop_server()
+
+    _server_ = StoppableWSGIRefServer(host=address, port=port)
+    app.run(server=_server_)
+
+def stop_server():
+    _server_.stop()
