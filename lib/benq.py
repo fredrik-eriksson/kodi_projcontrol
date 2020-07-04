@@ -25,23 +25,23 @@ from lib.helpers import log
 # Remember to add new models to the settings.xml-file as well
 _valid_sources_ = {
         "535 series": {
-            "COMPUTER/YPbPr":		"RGB",
-            "COMPUTER 2/YPbPr2":	"RGB2",
-			"HDMI(MHL)":			"hdmi",
-			"HDMI 2(MHL2)":			"hdmi2",
-			"Composite":			"vid",
-			"S-Video":				"svid",
+        	"COMPUTER/YPbPr":	"RGB",
+        	"COMPUTER 2/YPbPr2":	"RGB2",
+		"HDMI(MHL)":		"hdmi",
+		"HDMI 2(MHL2)":		"hdmi2",
+		"Composite":		"vid",
+		"S-Video":		"svid",
             }
         }
 
 # map the generic commands to ESC/VP21 commands
 _command_mapping_ = {
-        lib.CMD_PWR_ON: "<CR>*pow=on#<CR>",
-        lib.CMD_PWR_OFF: "<CR>*pow=off#<CR>",
-        lib.CMD_PWR_QUERY: "<CR>*pow=?#<CR>",
+        lib.CMD_PWR_ON: "*pow=on#",
+        lib.CMD_PWR_OFF: "*pow=off#",
+        lib.CMD_PWR_QUERY: "*pow=?#",
 
-        lib.CMD_SRC_QUERY: "<CR>*sour=?#<CR>",
-        lib.CMD_SRC_SET: "<CR>*sour={source_id}#<CR>",
+        lib.CMD_SRC_QUERY: "*sour=?#",
+        lib.CMD_SRC_SET: "*sour={source_id}#",
         }
 
 _serial_options_ = {
@@ -88,18 +88,24 @@ class ProjectorInstance:
 
 
     def _verify_connection(self):
-        """Verify that the projecor is ready to receive commands.  Use the
-        <CR>*ltim=?#<CR> command to see if we get a valid response.
-
+        """Verify that the projecor is ready to receive commands. The projector
+        is ready when it returns with a colon when sending carriage return to
+        it.
         """
-        res = self._send_command("<CR>*ltim=?#<CR>")
-        return res is not None
+        self._send_command("\r")
+        res = ""
+        while res is not None:
+            res = self._read_response()
+            if res.endswith("\0") :
+                return True
+            self._send_command("\r")
+        return False
 
     def _read_response(self):
         """Read response from projector"""
         read = ""
         res = ""
-        # Match either <CR>*pow=off#<CR> or <CR>*ltim=?#<CR>
+        # Match either *pow=off# or *ltim=?#
         while not re.match('(\([^?]*\)|\(.*\?\)\([-0-9]*,[0-9]*\))', res):
             r, w, x = select.select([self.serial.fileno()], [], [], self.timeout)
             if len(r) == 0:
@@ -116,7 +122,7 @@ class ProjectorInstance:
                             )
                     return None
 
-        part = res.split('\n', 1)
+        part = res.split('\r', 1)
         log("projector responded: '{}'".format(part[0]))
         return part[0]
 
@@ -128,7 +134,7 @@ class ProjectorInstance:
         """
         ret = None
         try:
-            self.serial.write("{}\n".format(cmd_str))
+            self.serial.write("{}\r".format(cmd_str))
         except OSError as e:
             raise lib.errors.ProjectorError(
                     "Error when Sending command '{}' to projector: {}".\
@@ -136,36 +142,27 @@ class ProjectorInstance:
                     )
             return ret
 
-        ret = self._read_response()
-        while ")" not in ret and ret != '?':
+        if cmd_str.endswith('?#'):
             ret = self._read_response()
-        if ret == '?':
-            log("Error, command not understood by projector!")
-            return None
-        log("Command sent successfully!")
-        if cmd_str.endswith('?)'):
-            r = re.match('\(.+\)\(([-\d]+),(\d+)\)', ret)
-            ret = r.group(2)
-            if cmd_str in _boolean_commands:
-                if int(ret) == 1:
-                    ret = True
-                elif int(ret) == 0:
-                    ret = False
-                else:
-                    log("Error, unable to parse boolean value!")
-                    return None
+            if ret == 'Illegal format':
+                log("Projector responded with Error!")
+                return None
+            log("Command sent successfully")
+            ret = ret.split('=', 1)[1]
+            if ret == "on#":
+                ret = True
+            elif ret == "off#":
+                ret = False
             elif ret in [
                     _valid_sources_[self.model][x] for x in
                         _valid_sources_[self.model]
                     ]:
                 ret = [
-                        x for x in
+                        x for x in 
                         _valid_sources_[self.model] if
                             _valid_sources_[self.model][x] == ret][0]
-
+        
             return ret
-        else:
-            return None
 
     def send_command(self, command, **kwargs):
         """Send command to the projector.
