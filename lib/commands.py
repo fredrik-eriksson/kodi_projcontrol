@@ -14,6 +14,7 @@ import xbmcaddon
 import lib
 import lib.epson
 import lib.infocus
+import lib.benq
 import lib.errors
 import lib.helpers
 
@@ -26,6 +27,8 @@ def _get_proj_module_():
         return lib.epson
     if manufacturer == "InFocus":
         return lib.infocus
+    if manufacturer == "BenQ":
+        return lib.benq
     else:
         raise lib.errors.ConfigurationError("Manufacturer {} is not supported".format(manufacturer))
 
@@ -35,6 +38,8 @@ def _get_configured_model_():
         model = __addon__.getSetting("epson_model")
     elif manufacturer == "InFocus":
         model = __addon__.getSetting("infocus_model")
+    elif manufacturer == "BenQ":
+        model = __addon__.getSetting("benq_model")
     else:
         raise lib.errors.ConfigurationError("Manufacturer {} is not supported".format(manufacturer))
     return model
