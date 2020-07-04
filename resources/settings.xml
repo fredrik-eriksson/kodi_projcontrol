@@ -12,8 +12,8 @@
         values="IN72/IN74/IN76" default="IN72/IN74/IN76"
         visible="eq(-2,InFocus)"
         subsetting="true"/>
-    <setting label="32005" type="select" id="benq_model"
-        values="535 series" default="535 series"
+      <setting label="32005" type="select" id="benq_model"
+        values="M535 series" default="M535 series"
         visible="eq(-3,BenQ)"
         subsetting="true"/>
   </category>
