@@ -14,7 +14,7 @@
     <summary lang="en_GB">Control your projector from Kodi</summary>
     <summary lang="sv_SE">Hantera din projektor med Kodi</summary>
     <summary lang="nb_NO">Styr prosjektøren din med Kodi</summary>
-      <summary lanf="de_CH">Kontrolliere deinen Beamer mit Kodi</summary>
+      <summary lang="de_CH">Kontrolliere deinen Beamer mit Kodi</summary>
     <description lang="en_GB">From Kodi, control a projector connected via a serial port. See https://github.com/fredrik-eriksson/kodi_projcontrol for supported projectors and features.</description>
     <description lang="sv_SE">Hantera en projektor ansluten via serieport, via Kodi. Se https://github.com/fredrik-eriksson/kodi_projcontrol (Endast på engelska) för vilka projektorer och funktioner som stöds.</description>
     <description lang="nb_NO">Styr en prosjektør som er koblet til Kodi via seriellport.  Se https://github.com/fredrik-eriksson/kodi_projcontrol (kun på engelsk) over oversikt over hvilke prosjektører og funksjoner som støttes.</description>
