@@ -7,7 +7,7 @@
 serial interface.
 
 Protocol description fetched on 2020-07-04 from
-https://business-display.benq.com/content/dam/bb/en/product/projector/corporate/lh770/quick-start-guide/lh770-rs232-control-guide-0-windows7-windows8-winxp.pdf
+https://benqesupport.blob.core.windows.net/esupport/Projector/Control%20Protocols/MH535/RS232%20Control%20Guide_0_Windows10_Windows7_Windows8.pdf
 
 """
 
@@ -24,7 +24,7 @@ from lib.helpers import log
 # List of all valid models and their input sources
 # Remember to add new models to the settings.xml-file as well
 _valid_sources_ = {
-        "535 series": {
+        "M535 series": {
         	"COMPUTER/YPbPr":	"RGB",
         	"COMPUTER 2/YPbPr2":	"RGB2",
 		"HDMI(MHL)":		"hdmi",
@@ -89,7 +89,7 @@ class ProjectorInstance:
 
     def _verify_connection(self):
         """Verify that the projecor is ready to receive commands. The projector
-        is ready when it returns with a colon when sending carriage return to
+        is ready when it returns with a NUL when sending carriage return to
         it.
         """
         self._send_command("\r")
