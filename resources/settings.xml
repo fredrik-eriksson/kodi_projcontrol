@@ -3,7 +3,7 @@
   <category label="32001">
     <setting label="32002" type="text" id="device" default="/dev/ttyUSB0"/>
     <setting label="32003" type="number" id="timeout" default="5"/>
-    <setting label="32004" type="select" id="manufacturer" values="Epson|InFocus|BenQ" default="Epson"/>
+    <setting label="32004" type="select" id="manufacturer" values="Epson|InFocus|BenQ|Acer" default="Epson"/>
       <setting label="32005" type="select" id="epson_model" 
         values="TW3200|PowerLite 820p" default="TW3200"
         visible="eq(-1,Epson)"
@@ -15,6 +15,10 @@
       <setting label="32005" type="select" id="benq_model"
         values="M535 series" default="M535 series"
         visible="eq(-3,BenQ)"
+        subsetting="true"/>
+      <setting label="32005" type="select" id="acer_model"
+	values="generic/X1373WH" default="generic/X1373WH"
+        visible="eq(-4,Acer)"
         subsetting="true"/>
   </category>
   <category label="32010">
