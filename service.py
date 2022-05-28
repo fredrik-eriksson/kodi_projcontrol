@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 # -*- coding: utf-8 -*-
 # Copyright (c) 2015,2018 Fredrik Eriksson <git@wb9.se>

@@ -126,7 +126,7 @@ class ProjectorInstance:
                         )
             for f in r:
                 try:
-                    read = os.read(f, 256)
+                    read = os.read(f, 256).decode('utf-8')
                     res += read
                 except OSError as e:
                     raise lib.errors.ProjectorError(
@@ -146,7 +146,7 @@ class ProjectorInstance:
         """
         ret = None
         try:
-            self.serial.write("{}\r".format(cmd_str))
+            self.serial.write("{}\r".format(cmd_str).encode('utf-8'))
         except OSError as e:
             raise lib.errors.ProjectorError(
                     "Error when Sending command '{}' to projector: {}".\

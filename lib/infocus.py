@@ -108,7 +108,7 @@ class ProjectorInstance:
         read = ""
         res = ""
         # Match either (PWR0) or (LMP?)(0-65535,2344)
-        while not re.match('(\([^?]*\)|\(.*\?\)\([-0-9]*,[0-9]*\))', res):
+        while not re.match(r'(\([^?]*\)|\(.*\?\)\([-0-9]*,[0-9]*\))', res):
             r, w, x = select.select([self.serial.fileno()], [], [], self.timeout)
             if len(r) == 0:
                 raise lib.errors.ProjectorError(
@@ -116,7 +116,7 @@ class ProjectorInstance:
                         )
             for f in r:
                 try:
-                    read = os.read(f, 256)
+                    read = os.read(f, 256).decode('utf-8')
                     res += read
                 except OSError as e:
                     raise lib.errors.ProjectorError(
@@ -136,7 +136,7 @@ class ProjectorInstance:
         """
         ret = None
         try:
-            self.serial.write("{}\n".format(cmd_str))
+            self.serial.write("{}\n".format(cmd_str).encode('utf-8'))
         except OSError as e:
             raise lib.errors.ProjectorError(
                     "Error when Sending command '{}' to projector: {}".\

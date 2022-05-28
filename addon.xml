@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="service.projcontrol"
     name="Projector Control"
-    version="1.3.0"
+    version="1.4.0"
     provider-name="Fredrik Eriksson">
   <requires>
-    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="xbmc.python" version="3.0.0"/>
     <import addon="script.module.bottle" version="0.12.8"/>
     <import addon="script.module.pyserial" version="3.4.0"/>
   </requires>
@@ -14,11 +14,17 @@
     <summary lang="en_GB">Control your projector from Kodi</summary>
     <summary lang="sv_SE">Hantera din projektor med Kodi</summary>
     <summary lang="nb_NO">Styr prosjektøren din med Kodi</summary>
+      <summary lang="de_CH">Kontrolliere deinen Beamer mit Kodi</summary>
     <description lang="en_GB">From Kodi, control a projector connected via a serial port. See https://github.com/fredrik-eriksson/kodi_projcontrol for supported projectors and features.</description>
     <description lang="sv_SE">Hantera en projektor ansluten via serieport, via Kodi. Se https://github.com/fredrik-eriksson/kodi_projcontrol (Endast på engelska) för vilka projektorer och funktioner som stöds.</description>
     <description lang="nb_NO">Styr en prosjektør som er koblet til Kodi via seriellport.  Se https://github.com/fredrik-eriksson/kodi_projcontrol (kun på engelsk) over oversikt over hvilke prosjektører og funksjoner som støttes.</description>
+    <description lang="de_CH">Kontrolliere deinen mit einem seriellen Port verbundenen Beamer mit Kodi. Siehe unter https://github.com/fredrik-eriksson/kodi_projcontrol (nur in englisch) nach unterstützten Beamer und Funktionen.</description>
 
-    <news>v1.3.0 - 2018-08-16
+    <news>
+v1.4.0 - 2021-04-20
+- Kodi 19 support
+
+v1.3.0 - 2018-08-16
 - replaced flask dependency with bottle
 - some restructuring
 - other changes required for inclusion in official Kodi repository
