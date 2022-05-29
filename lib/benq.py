@@ -88,18 +88,11 @@ class ProjectorInstance:
 
 
     def _verify_connection(self):
-        """Verify that the projecor is ready to receive commands. The projector
-        is ready when it returns with a NUL when sending carriage return to
-        it.
+        """Verify that the projecor is ready to receive commands.  Use the
+        *pow=?# command to see if we get a valid response.
         """
-        self._send_command("\r")
-        res = ""
-        while res is not None:
-            res = self._read_response()
-            if res.endswith("\0") :
-                return True
-            self._send_command("\r")
-        return False
+        res = self._send_command("*pow=?#")
+        return res is not None
 
     def _read_response(self):
         """Read response from projector"""
