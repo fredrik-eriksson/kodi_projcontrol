@@ -98,7 +98,7 @@ class ProjectorInstance:
         """Read response from projector"""
         read = ""
         res = ""
-        # Match either *pow=off# or *ltim=?#
+        # Match either *pow=off# or *pow=on#
         while not re.match(r'(\([^?]*\)|\(.*\?\)\([-0-9]*,[0-9]*\))', res):
             r, w, x = select.select([self.serial.fileno()], [], [], self.timeout)
             if len(r) == 0:
