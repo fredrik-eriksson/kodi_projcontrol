@@ -116,7 +116,7 @@ class ProjectorInstance:
                     return None
 
         part = res.split('\r', 1)
-        log("projector responded: '{}'".format(part[0]))
+        log("projector responded: '{}'".format(part[1]))
         return part[0]
 
 
