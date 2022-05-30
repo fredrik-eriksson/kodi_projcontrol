@@ -127,7 +127,7 @@ class ProjectorInstance:
         """
         ret = None
         try:
-            self.serial.write("{}\r".format(cmd_str).encode('utf-8'))
+            self.serial.write("\r{}\r".format(cmd_str).encode('utf-8'))
         except OSError as e:
             raise lib.errors.ProjectorError(
                     "Error when Sending command '{}' to projector: {}".\
