@@ -11,7 +11,7 @@ __addon__ = xbmcaddon.Addon()
 def display_error_message(
         message_id,
         append="",
-        title=__addon__.getLocalizedString(32100).encode('utf-8'),
+        title=__addon__.getLocalizedString(32100),
         type_=xbmcgui.NOTIFICATION_ERROR,
         time=1000,
         sound=True):
@@ -27,7 +27,7 @@ def display_error_message(
 def display_message(
         message_id, 
         append="",
-        title=__addon__.getLocalizedString(32101).encode('utf-8'), 
+        title=__addon__.getLocalizedString(32101), 
         type_=xbmcgui.NOTIFICATION_INFO,
         time=5000,
         sound=False):
@@ -36,7 +36,7 @@ def display_message(
     dialog = xbmcgui.Dialog()
     dialog.notification(
             title, 
-            "{}{}".format(__addon__.getLocalizedString(message_id).encode('utf-8'), append),
+            "{}{}".format(__addon__.getLocalizedString(message_id), append),
             type_,
             time,
             sound)
