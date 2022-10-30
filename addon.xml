@@ -14,11 +14,11 @@
     <summary lang="en_GB">Control your projector from Kodi</summary>
     <summary lang="sv_SE">Hantera din projektor med Kodi</summary>
     <summary lang="nb_NO">Styr prosjektøren din med Kodi</summary>
-      <summary lang="de_DE">Kontrolliere deinen Beamer mit Kodi</summary>
-    <description lang="en_GB">From Kodi, control a projector connected via a serial port. See https://github.com/fredrik-eriksson/kodi_projcontrol for supported projectors and features.</description>
+    <summary lang="de_DE">Kontrolliere deinen Beamer mit Kodi</summary>
+    <description lang="en_GB">From Kodi, control a projector connected via a serial port. Currently support projectors from Epson, InFocus and BenQ. See https://github.com/fredrik-eriksson/kodi_projcontrol for more information.</description>
+    <description lang="nb_NO">Styr en prosjektør som er koblet til Kodi via seriellport.  Støtter så langt prosjektører fra Epson, InFocus og Benq. Se https://github.com/fredrik-eriksson/kodi_projcontrol (kun på engelsk) for mer informasjon.</description>
     <description lang="sv_SE">Hantera en projektor ansluten via serieport, via Kodi. Se https://github.com/fredrik-eriksson/kodi_projcontrol (Endast på engelska) för vilka projektorer och funktioner som stöds.</description>
-    <description lang="nb_NO">Styr en prosjektør som er koblet til Kodi via seriellport.  Se https://github.com/fredrik-eriksson/kodi_projcontrol (kun på engelsk) over oversikt over hvilke prosjektører og funksjoner som støttes.</description>
-    <description lang="de_CH">Kontrolliere deinen mit einem seriellen Port verbundenen Beamer mit Kodi. Siehe unter https://github.com/fredrik-eriksson/kodi_projcontrol (nur in englisch) nach unterstützten Beamer und Funktionen.</description>
+    <description lang="de_DE">Kontrolliere deinen mit einem seriellen Port verbundenen Beamer mit Kodi. Siehe unter https://github.com/fredrik-eriksson/kodi_projcontrol (nur in englisch) nach unterstützten Beamer und Funktionen.</description>
 
     <news>
 v1.4.0 - 2021-04-20
