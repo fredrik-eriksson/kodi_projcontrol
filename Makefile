@@ -15,7 +15,7 @@ dist:
 
 prepare_release:
 	[ -d "$(REPO_PLUGINS)" ] || \
-		git clone https://github.com/xbmc/repo-scripts "$(REPO_PLUGINS)"
+		git clone --depth 5 -b $(RELEASE_BRANCH) https://github.com/xbmc/repo-scripts "$(REPO_PLUGINS)"
 	git -C $(REPO_PLUGINS) stash
 	git -C $(REPO_PLUGINS) checkout $(RELEASE_BRANCH)
 	rm -rf $(REPO_PLUGINS)/plugin.$(ADDON_NAME)
