@@ -88,6 +88,13 @@ _valid_sources_ = {
             "S-Video":   ("Src ?", "018"), # don't know response
             "Composite": ("Src ?", "019"), # don't know response
             "HDMI":      ("Src 8", "050"),
+            },
+        "V7500": {
+            "VGA - RGB":  ("Src 1", "015"),
+            "VGA - PbPr": ("Src ?", "017"), # don't know response
+            "Composite":  ("Src ?", "019"), # don't know response
+            "Component":  ("Src ?", "020"), # don't know response
+            "HDMI":       ("Src 8", "050"),
             }
         }
 

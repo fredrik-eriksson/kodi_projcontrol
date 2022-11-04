@@ -17,7 +17,7 @@
         visible="eq(-3,BenQ)"
         subsetting="true"/>
       <setting label="32005" type="select" id="acer_model"
-	values="generic/X1373WH" default="generic/X1373WH"
+	values="generic/X1373WH|V7500" default="generic/X1373WH"
         visible="eq(-4,Acer)"
         subsetting="true"/>
   </category>
