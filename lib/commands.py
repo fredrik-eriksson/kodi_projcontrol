@@ -15,6 +15,7 @@ import lib
 import lib.epson
 import lib.infocus
 import lib.benq
+import lib.acer
 import lib.errors
 import lib.helpers
 
@@ -29,6 +30,8 @@ def _get_proj_module_():
         return lib.infocus
     if manufacturer == "BenQ":
         return lib.benq
+    if manufacturer == "Acer":
+        return lib.acer
     else:
         raise lib.errors.ConfigurationError("Manufacturer {} is not supported".format(manufacturer))
 
@@ -40,6 +43,8 @@ def _get_configured_model_():
         model = __addon__.getSetting("infocus_model")
     elif manufacturer == "BenQ":
         model = __addon__.getSetting("benq_model")
+    elif manufacturer == "Acer":
+        model = __addon__.getSetting("acer_model")
     else:
         raise lib.errors.ConfigurationError("Manufacturer {} is not supported".format(manufacturer))
     return model
