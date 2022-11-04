@@ -19,10 +19,6 @@ Requirements
 
 Supported Projectors
 --------------------
-* Epson TW3200
-* Epson PowerLite 820p
-* InFocus IN72/IN74/IN76
-
 It should be a trivial task to add support for more projectors with serial connections. However I can't test any new implementation
 without having a projector of that model. While I wouldn't mind if you send me 
 projectors of different brands and models, you will probably find it cheaper to learn a little python and implement it yourself.
@@ -38,6 +34,25 @@ support for a projector:
 * how to verify projector is accepting commands (if possible)
 * how to detect and handle error-responses 
 
+Below is a list of currently supported projectors
+
+Epson
+#####
+* TW3200
+* PowerLite 820p
+
+InFocus
+#######
+* IN72/IN74/IN76
+
+Acer
+####
+* X1373WH
+* V7500
+
+BenQ
+####
+* M535 series
 
 Usage
 -----
@@ -45,6 +60,8 @@ Copy repository to your Kodi addon directory (usually ~/.kodi/addons) and rename
 
 REST API
 --------
+Note if you use the REST API: the api provides absolutely no security; never enable it on untrusted network.
+
 After configuring and enabling the REST API from Kodi you can test it using curl
 
 .. code-block:: shell
