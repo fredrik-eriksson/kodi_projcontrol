@@ -21,8 +21,10 @@
     <description lang="de_CH">Kontrolliere deinen mit einem seriellen Port verbundenen Beamer mit Kodi. Siehe unter https://github.com/fredrik-eriksson/kodi_projcontrol (nur in englisch) nach unterstützten Beamer und Funktionen.</description>
 
     <news>
-v1.4.0 - 2021-04-20
+v1.4.0 - 2022-11-17
 - Kodi 19 support
+- Add support for BenQ projectors
+- Add support for Acer projectors
 
 v1.3.0 - 2018-08-16
 - replaced flask dependency with bottle
