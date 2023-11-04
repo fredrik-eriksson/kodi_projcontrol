@@ -2,6 +2,8 @@ Projector Control for Kodi
 ==========================
 Service add-on to Kodi for controling projectors with an optional RESTful API. This is intended to be used on stand-alone media centers running Kodi.
 
+**This project is now archived as I have no need for this plugin any more. Feel free to fork and revive it if you find it useful.**
+
 Features
 --------
 * Power on, off and set input on the projector when kodi starts/exits and/or screensaver activates/deactivates
